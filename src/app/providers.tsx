@@ -1,10 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import AtomProvider from "~/components/providers/AtomProvider";
+import AtomProvider from "@/components/providers/AtomProvider";
 
 const WagmiProvider = dynamic(
-  () => import("~/components/providers/WagmiProvider"),
+  () => import("@/components/providers/WagmiProvider"),
   {
     ssr: false,
   }

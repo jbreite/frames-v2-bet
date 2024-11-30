@@ -1,4 +1,5 @@
-import { SportMarket, TradeData } from "~/utils/overtime/types/markets";
+import { SportMarket } from "@/utils/overtime/types/markets";
+import { TradeData } from "@/utils/overtime/types/markets";
 import { atom } from "jotai";
 
 // Define the type for a single bet

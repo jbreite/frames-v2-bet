@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   CB_BET_SUPPORTED_NETWORK_IDS,
   OVERTIME_API_BASE_URL,
-} from "~/app/constants/Constants";
+} from "@/app/constants/Constants";
 import {
   SportMarket,
   SportMarketStatusEnum,
-} from "~/utils/overtime/types/markets";
-import { LeagueEnum, SportEnum } from "~/utils/overtime/enums/sport";
-import { MarketTypeEnum } from "~/utils/overtime/enums/marketTypes";
+} from "@/utils/overtime/types/markets";
+import { LeagueEnum, SportEnum } from "@/utils/overtime/enums/sport";
+import { MarketTypeEnum } from "@/utils/overtime/enums/marketTypes";
 
 //Check this
 interface MarketResponse {

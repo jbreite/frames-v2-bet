@@ -4,8 +4,8 @@ import {
   ScoringTypeEnum,
   PeriodTypeEnum,
   SportEnum,
-} from "~/utils/overtime/enums/sport";
-import { LeagueInfo } from "~/utils/overtime/types/sports";
+} from "@/utils/overtime/enums/sport";
+import { LeagueInfo } from "@/utils/overtime/types/sports";
 
 //TODO: Might be some shit to do with the images here
 
