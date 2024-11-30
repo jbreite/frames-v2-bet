@@ -108,7 +108,7 @@ export default function Home() {
     );
 
     SportView = (
-      <div className="flex flex-col">
+      <div className="flex flex-col w-full">
         {betListData.map((item, index) => {
           if (typeof item === "number") {
             // League header
@@ -144,7 +144,7 @@ export default function Home() {
   }
 
   return (
-    <div>
+    <div className="flex flex-col w-full px-4">
       <h1>bets</h1>
       {SportView}
     </div>

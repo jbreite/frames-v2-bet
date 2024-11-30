@@ -27,7 +27,7 @@ export default function OddsButton({
         flex items-center justify-center
         w-full
         rounded-xl border-2 border-gray-200
-        min-h-[54px]
+        // min-h-[54px]
         ${selected ? "bg-gray-200" : "bg-transparent"}
       `}
     >
