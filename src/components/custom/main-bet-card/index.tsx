@@ -6,6 +6,7 @@ import OddsRow, { MAIN_CARD_MARKETS } from "./odds-row";
 import { PositionEnum } from "@/utils/overtime/enums/markets";
 import TeamInfo from "./team-info";
 import TeamDivider from "./team-divider";
+import { getTeamImageSource } from "@/utils/overtime/ui/images";
 
 interface MainBetCardProps {
   sportMarket: SportMarket;
@@ -18,8 +19,14 @@ export default function MainBetCard({
   onPress,
   onPressOddsButton,
 }: MainBetCardProps) {
-  const homeTeamImage = "https://images8.alphacoders.com/969/969518.jpg";
-  const awayTeamImage = "https://images8.alphacoders.com/969/969518.jpg";
+  const homeTeamImage = getTeamImageSource(
+    sportMarket.homeTeam,
+    sportMarket.leagueId
+  );
+  const awayTeamImage = getTeamImageSource(
+    sportMarket.awayTeam,
+    sportMarket.leagueId
+  );
 
   const formattedDate = convertUnixToFormattedDate(sportMarket.maturity);
 
