@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import AtomProvider from "~/components/providers/AtomProvider";
 
 const WagmiProvider = dynamic(
   () => import("~/components/providers/WagmiProvider"),
@@ -10,5 +11,9 @@ const WagmiProvider = dynamic(
 );
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return <WagmiProvider>{children}</WagmiProvider>;
+  return (
+    <WagmiProvider>
+      <AtomProvider>{children}</AtomProvider>
+    </WagmiProvider>
+  );
 }

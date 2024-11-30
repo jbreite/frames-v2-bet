@@ -31,7 +31,6 @@ export default function Demo() {
     data: marketsData,
     isLoading: marketsIsLoading,
     error: marketsIsError,
-    refetch,
   } = useQuery({
     queryKey: ["markets"],
     queryFn: () => getMarkets(CB_BET_SUPPORTED_NETWORK_IDS.OPTIMISM, {}),
@@ -267,7 +266,7 @@ export default function Demo() {
           </>
         )}
       </div>
-      {marketsIsLoading && <div>Loading markets...</div>  }
+      {marketsIsLoading && <div>Loading markets...</div>}
       {marketsIsError && <div>Error loading markets</div>}
       {marketsData && <div>{JSON.stringify(marketsData)}</div>}
     </div>
