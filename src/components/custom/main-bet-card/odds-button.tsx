@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/Button";
-
 interface OddsButtonProps {
   line: string;
   onPress: () => void;
@@ -21,12 +19,13 @@ export default function OddsButton({
   };
 
   return (
-    <Button
+    <button
       onClick={handlePress}
       disabled={zeroLine}
       className={`
-        flex-1 py-2 px-4
+        py-2 px-4
         flex items-center justify-center
+        w-full
         rounded-xl border-2 border-gray-200
         min-h-[54px]
         ${selected ? "bg-gray-200" : "bg-transparent"}
@@ -35,12 +34,14 @@ export default function OddsButton({
       {zeroLine ? (
         <LockIcon className="h-[18px] w-[18px]" />
       ) : (
-        <div className="flex flex-col items-center justify-center">
-          {label && <span className="font-semibold">{label}</span>}
-          <span className="font-semibold">{line}</span>
+        <div className="flex flex-col  items-center justify-center">
+          {label && (
+            <span className="font-semibold text-black w-full">{label}</span>
+          )}
+          <span className="font-semibold text-black w-full">{line}</span>
         </div>
       )}
-    </Button>
+    </button>
   );
 }
 

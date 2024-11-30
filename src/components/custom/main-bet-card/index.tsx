@@ -28,7 +28,7 @@ export default function MainBetCard({
       onClick={onPress}
       className="pb-4 px-6 flex flex-col gap-2 cursor-pointer"
     >
-      <div className="flex-1 gap-1">
+      <div className="flex flex-col w-full gap-1">
         <div className="flex flex-row gap-1">
           <TeamInfo teamImage={awayTeamImage} teamName={sportMarket.awayTeam} />
           <OddsRow

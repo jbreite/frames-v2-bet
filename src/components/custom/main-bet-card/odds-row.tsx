@@ -49,8 +49,8 @@ export default function OddsRow({
   }, {} as Record<MarketTypeEnum, ReturnType<typeof findOddsForMarket>>);
 
   return (
-    <div className="flex-1">
-      <div className="flex flex-row gap-1">
+    <div className="flex w-full">
+      <div className="flex flex-row gap-1 w-full">
         {/* Winner */}
         <OddsButton
           line={formatAmericanOdds(

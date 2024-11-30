@@ -1,18 +1,6 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 import sdk, { type FrameContext } from "@farcaster/frame-sdk";
-import {
-  useAccount,
-  useSendTransaction,
-  useSignMessage,
-  useSignTypedData,
-  useWaitForTransactionReceipt,
-  useDisconnect,
-  useConnect,
-} from "wagmi";
 
-import { config } from "@/components/providers/WagmiProvider";
-import { Button } from "@/components/ui/Button";
-import { truncateAddress } from "@/lib/truncateAddress";
 import { useQuery } from "@tanstack/react-query";
 import { getMarkets } from "@/app/api/markets/route";
 import {
@@ -26,17 +14,14 @@ import { useAtom } from "jotai";
 import { LeagueEnum } from "@/utils/overtime/enums/sport";
 import { LeagueMap } from "@/app/constants/sports";
 import MainBetCard from "./custom/main-bet-card";
+import { getTradeDataFromSportMarket } from "@/utils/overtime/ui/helpers";
 
 const REFETCH_INTERVAL = 60000 * 3;
 type BetListItem = LeagueEnum | SportMarket;
 
 export default function Demo() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
-  const [context, setContext] = useState<FrameContext>();
-  const [isContextOpen, setIsContextOpen] = useState(false);
-  const [txHash, setTxHash] = useState<string | null>(null);
-
-  const { address, isConnected } = useAccount();
+  const [, setContext] = useState<FrameContext>();
 
   const {
     data: marketsData,
@@ -47,13 +32,6 @@ export default function Demo() {
     queryFn: () => getMarkets(CB_BET_SUPPORTED_NETWORK_IDS.OPTIMISM, {}),
     refetchInterval: REFETCH_INTERVAL,
   });
-
-  const {
-    sendTransaction,
-    error: sendTxError,
-    isError: isSendTxError,
-    isPending: isSendTxPending,
-  } = useSendTransaction();
 
   useEffect(() => {
     const load = async () => {
@@ -131,7 +109,7 @@ export default function Demo() {
     SportView = (
       <div className="flex flex-col">
         {betListData.map((item, index) => {
-          if (typeof item === 'number') {
+          if (typeof item === "number") {
             // League header
             return (
               <div key={index} className="py-2 px-4 bg-gray-100 font-semibold">
@@ -147,11 +125,14 @@ export default function Demo() {
                 sportMarket={market}
                 onPress={() => {}}
                 onPressOddsButton={(position, marketType) => {
-                  handleMarketPress(market, {
-                    typeId: marketType,
-                    position: position,
-                    line: 0,
-                  });
+                  const tradeData = getTradeDataFromSportMarket(
+                    market,
+                    position,
+                    marketType
+                  );
+                  if (tradeData) {
+                    handleMarketPress(market, tradeData);
+                  }
                 }}
               />
             );
