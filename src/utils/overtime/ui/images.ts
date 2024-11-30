@@ -4,8 +4,6 @@ import { SUPPORTED_LEAGUES } from "@/app/constants/Constants";
 
 export const getTeamImageSource = (team: string, league: LeagueEnum) => {
   let leagueLabel = getLeagueLabel(league);
-  console.log("leagueLabel", leagueLabel);
-  console.log("team", team);
 
   if (leagueLabel === "NCAA Football") {
     leagueLabel = "ncaaf";
