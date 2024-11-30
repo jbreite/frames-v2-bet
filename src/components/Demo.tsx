@@ -123,7 +123,7 @@ export default function Demo() {
 
   return (
     <div className="w-[300px] mx-auto py-4 px-2">
-      <h1 className="text-2xl font-bold text-center mb-4">Frames v2 Demo</h1>
+      <h1 className="text-2xl font-bold text-center mb-4">Frame Bets</h1>
 
       <div className="mb-4">
         <h2 className="font-2xl font-bold">Context</h2>
