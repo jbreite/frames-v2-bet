@@ -19,7 +19,7 @@ import { getTradeDataFromSportMarket } from "@/utils/overtime/ui/helpers";
 const REFETCH_INTERVAL = 60000 * 3;
 type BetListItem = LeagueEnum | SportMarket;
 
-export default function Demo() {
+export default function Home() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
   const [, setContext] = useState<FrameContext>();
 
