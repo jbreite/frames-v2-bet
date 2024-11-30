@@ -15,6 +15,7 @@ import { LeagueEnum } from "@/utils/overtime/enums/sport";
 import { LeagueMap } from "@/app/constants/sports";
 import MainBetCard from "./custom/main-bet-card";
 import { getTradeDataFromSportMarket } from "@/utils/overtime/ui/helpers";
+import StickyHeaderMainBetCard from "./custom/home-sticky-header";
 
 const REFETCH_INTERVAL = 60000 * 3;
 type BetListItem = LeagueEnum | SportMarket;
@@ -112,8 +113,8 @@ export default function Home() {
           if (typeof item === "number") {
             // League header
             return (
-              <div key={index} className="py-2 px-4 bg-gray-100 font-semibold">
-                {LeagueMap[item as LeagueEnum].label}
+              <div key={index} className="sticky top-0 z-10">
+                <StickyHeaderMainBetCard leagueId={item as LeagueEnum} />
               </div>
             );
           } else {
