@@ -16,6 +16,7 @@ import BetInput from "./bet-input";
 import { useState } from "react";
 import { INITIAL_BET_AMOUNT } from "@/app/constants/Constants";
 import BetHeader from "./bet-header";
+import { useAccount, useBalance } from "wagmi";
 
 interface BetTabProps {
   isOpen: boolean;
@@ -23,10 +24,18 @@ interface BetTabProps {
 }
 
 export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
+  const { address } = useAccount();
   const [userBetsAtomData, setUserBetsAtom] = useAtom(userBetsAtom);
   const [betAmount, setBetAmount] = useState(INITIAL_BET_AMOUNT);
   const numberBets = userBetsAtomData.length;
   const tradeData = userBetsAtomData?.map((bet) => bet?.tradeData) || [];
+  console.log(tradeData);
+
+  const { data: ethBalance } = useBalance({
+    address: address,
+  });
+
+  console.log("ethBalance", ethBalance);
 
   const numberBetAmount = betAmount
     ? parseFloat(betAmount.replace("$", ""))
@@ -48,6 +57,7 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
         body: JSON.stringify({
           buyInAmount: numberBetAmount,
           tradeData: tradeData,
+          collateral: "ETH",
         }),
       });
       if (!response.ok) {
@@ -57,6 +67,11 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
     },
     enabled: numberBetAmount > 0 && tradeData.length > 0,
   });
+
+  if (quoteObject) {
+    console.log("quoteObject", quoteObject);
+  }
+
   // const onBetSuccess = () => {
   //     console.log("Bet placed successfully!");
   //     setUserBetsAtom([]);
@@ -129,6 +144,8 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
     return "To Win";
   };
 
+  const buttonLoadingText = getWinText(quoteObject);
+
   return (
     <Drawer.Root
       open={isOpen}
@@ -171,7 +188,7 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
                 isLoading={quoteLoading}
                 isDisabled={!quoteObject || isQuoteError}
                 buttonLabel="Place Bet"
-                isLoadingText="Placing Bet..."
+                isLoadingText={buttonLoadingText}
               />
             </div>
           </div>
