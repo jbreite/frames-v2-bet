@@ -18,7 +18,6 @@ import StickyHeaderMainBetCard from "./custom/home-sticky-header";
 import BetTab from "./custom/bet-tab";
 import { useAccount, useDisconnect } from "wagmi";
 import { useConnect } from "wagmi";
-import { Button } from "./ui/Button";
 import { config } from "./providers/WagmiProvider";
 
 const REFETCH_INTERVAL = 60000 * 3;
@@ -159,32 +158,28 @@ export default function Home() {
   }
 
   return (
+    <>
     <div className="flex flex-col w-full px-4 pt-4 gap-4">
-      <div className="sticky top-0 z-1">
-        <div className="flex items-center gap-2 justify-between">
-          <div className="flex items-center gap-2">
-            <img
-              src={context?.user?.pfpUrl}
-              className="w-10 h-10 rounded-full"
-            />
-            <p className=" font-semibold">{context?.user?.username}</p>
-          </div>
-          <Button
-            onClick={() =>
-              isConnected
-                ? disconnect()
-                : connect({ connector: config.connectors[0] })
-            }
-            className="w-fit justify-end self-end"
-          >
-            {isConnected ? "Disconnect" : "Connect"}
-          </Button>
+      <div className="flex items-center gap-2 justify-between">
+        <div className="flex items-center gap-2">
+          <img src={context?.user?.pfpUrl} className="w-10 h-10 rounded-full" />
+          <p className=" font-semibold">{context?.user?.username}</p>
         </div>
+        <button
+          onClick={() =>
+            isConnected
+              ? disconnect()
+              : connect({ connector: config.connectors[0] })
+          }
+        >
+          {isConnected ? "Disconnect" : "Connect"}
+        </button>
       </div>
       <div className="flex flex-col w-full ">
         {SportView}
-        <BetTab isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
       </div>
     </div>
+      <BetTab isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
+    </>
   );
 }
