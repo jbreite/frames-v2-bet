@@ -26,7 +26,7 @@ type BetListItem = LeagueEnum | SportMarket;
 export default function Home() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
   const [context, setContext] = useState<FrameContext>();
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
 
   const {
     data: marketsData,
@@ -159,26 +159,27 @@ export default function Home() {
 
   return (
     <>
-    <div className="flex flex-col w-full px-4 pt-4 gap-4">
-      <div className="flex items-center gap-2 justify-between">
-        <div className="flex items-center gap-2">
-          <img src={context?.user?.pfpUrl} className="w-10 h-10 rounded-full" />
-          <p className=" font-semibold">{context?.user?.username}</p>
+      <div className="flex flex-col w-full px-4 pt-4 gap-4">
+        <div className="flex items-center gap-2 justify-between">
+          <div className="flex items-center gap-2">
+            <img
+              src={context?.user?.pfpUrl}
+              className="w-10 h-10 rounded-full"
+            />
+            <p className=" font-semibold">{context?.user?.username}</p>
+          </div>
+          <button
+            onClick={() =>
+              isConnected
+                ? disconnect()
+                : connect({ connector: config.connectors[0] })
+            }
+          >
+            {isConnected ? "Disconnect" : "Connect"}
+          </button>
         </div>
-        <button
-          onClick={() =>
-            isConnected
-              ? disconnect()
-              : connect({ connector: config.connectors[0] })
-          }
-        >
-          {isConnected ? "Disconnect" : "Connect"}
-        </button>
+        <div className="flex flex-col w-full ">{SportView}</div>
       </div>
-      <div className="flex flex-col w-full ">
-        {SportView}
-      </div>
-    </div>
       <BetTab isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
     </>
   );

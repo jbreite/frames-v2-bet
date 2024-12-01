@@ -1,5 +1,5 @@
 import { createConfig, http, WagmiProvider } from "wagmi";
-import { base, optimism } from "wagmi/chains";
+import { optimism } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { frameConnector } from "@/lib/connector";
 

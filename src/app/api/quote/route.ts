@@ -5,16 +5,6 @@ import {
 import { TradeData } from "@/utils/overtime/types/markets";
 import { NextResponse } from "next/server";
 
-export class QuoteError extends Error {
-  constructor(
-    message: string,
-    public responseData?: any,
-    public statusCode?: number
-  ) {
-    super(message);
-    this.name = "QuoteError";
-  }
-}
 export interface SuccessfulQuoteData {
   totalQuote: {
     normalizedImplied: number;

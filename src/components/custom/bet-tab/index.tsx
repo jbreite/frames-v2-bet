@@ -45,7 +45,6 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
     data: quoteObject,
     isLoading: quoteLoading,
     isError: isQuoteError,
-    refetch: refetchQuote,
   } = useQuery({
     queryKey: ["quote", betAmount, tradeData],
     queryFn: async () => {
