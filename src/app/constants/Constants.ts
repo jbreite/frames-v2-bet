@@ -1,4 +1,4 @@
-import { LeagueEnum } from "~/utils/overtime/enums/sport";
+import { LeagueEnum } from "@/utils/overtime/enums/sport";
 
 export const OVERTIME_API_BASE_URL =
   "https://overtimemarketsv2.xyz/overtime-v2";

@@ -2,8 +2,8 @@ import { parseEther } from "viem";
 import { MarketTypeEnum } from "../enums/marketTypes";
 import { SportMarket, SportMarketOdds, TradeData } from "../types/markets";
 import { getLeagueIsDrawAvailable } from "./sportsHelpers";
+import { UserBet } from "@/lib/atom/atoms";
 import { GameOdds } from "../types/odds";
-// import { UserBet } from "@/lib/atom/atoms";
 
 export function getSpecificMarket(
   market: SportMarket,
@@ -225,25 +225,25 @@ export function findOddsForMarket(
   return closestToMinus110 ? closestToMinus110.market : null;
 }
 
-// export function updateBetWithNewMarketData(
-//   bet: UserBet,
-//   newMarkets: SportMarket[]
-// ): UserBet {
-//   const updatedMarket = newMarkets.find(
-//     (market) => market.gameId === bet.sportMarket.gameId
-//   );
-//   if (!updatedMarket) return bet;
+export function updateBetWithNewMarketData(
+  bet: UserBet,
+  newMarkets: SportMarket[]
+): UserBet {
+  const updatedMarket = newMarkets.find(
+    (market) => market.gameId === bet.sportMarket.gameId
+  );
+  if (!updatedMarket) return bet;
 
-//   const updatedTradeData = getTradeDataFromSportMarket(
-//     updatedMarket,
-//     bet.tradeData.position,
-//     bet.tradeData.typeId
-//   );
+  const updatedTradeData = getTradeDataFromSportMarket(
+    updatedMarket,
+    bet.tradeData.position,
+    bet.tradeData.typeId
+  );
 
-//   if (!updatedTradeData) return bet;
+  if (!updatedTradeData) return bet;
 
-//   return {
-//     sportMarket: updatedMarket,
-//     tradeData: updatedTradeData,
-//   };
-// }
+  return {
+    sportMarket: updatedMarket,
+    tradeData: updatedTradeData,
+  };
+}

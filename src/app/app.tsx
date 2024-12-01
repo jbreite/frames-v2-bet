@@ -2,12 +2,10 @@
 
 import dynamic from "next/dynamic";
 
-const Demo = dynamic(() => import("~/components/Demo"), {
+const Home = dynamic(() => import("@/components/Home"), {
   ssr: false,
 });
 
 export default function App() {
-  return (
-      <Demo />
-  );
+  return <Home />;
 }

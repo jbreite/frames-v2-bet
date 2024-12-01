@@ -1,6 +1,6 @@
-import { MarketTypeEnum } from "~/utils/overtime/enums/marketTypes";
-import { LeagueEnum, SportEnum } from "~/utils/overtime/enums/sport";
-import { GameStatusEnum, PositionEnum } from "~/utils/overtime/enums/markets";
+import { MarketTypeEnum } from "@/utils/overtime/enums/marketTypes";
+import { LeagueEnum, SportEnum } from "@/utils/overtime/enums/sport";
+import { GameStatusEnum, PositionEnum } from "@/utils/overtime/enums/markets";
 import { Coins } from "./tokents";
 
 type PlayerProps = {

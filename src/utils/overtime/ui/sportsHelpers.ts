@@ -1,14 +1,14 @@
 import {
   LeagueMap,
   PLAYER_PROPS_COMBINING_ENABLED_LEAGUES,
-} from "~/app/constants/sports";
+} from "@/app/constants/sports";
 import {
   LeagueEnum,
   MatchResolveTypeEnum,
   PeriodTypeEnum,
   ScoringTypeEnum,
   SportEnum,
-} from "~/utils/overtime/enums/sport";
+} from "@/utils/overtime/enums/sport";
 
 export const getLeagueLabel = (league: LeagueEnum) => {
   const leagueInfo = LeagueMap[league];

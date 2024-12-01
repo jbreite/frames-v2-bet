@@ -17,5 +17,6 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Inter', Helvetica, Arial, sans-serif;
+  font-family: "Inter", Helvetica, Arial, sans-serif;
+  pointer-events: all !important;
 }

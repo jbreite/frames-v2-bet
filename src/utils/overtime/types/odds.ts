@@ -1,4 +1,4 @@
-import { MarketTypeEnum } from "~/utils/overtime/enums/marketTypes";
+import { MarketTypeEnum } from "@/utils/overtime/enums/marketTypes";
 
 export interface GameOdds {
   [MarketTypeEnum.WINNER]: WinnerMarketOdds;

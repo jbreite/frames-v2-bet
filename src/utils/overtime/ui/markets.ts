@@ -1,7 +1,7 @@
-import { MarketTypeEnum } from "~/utils/overtime/enums/marketTypes";
-import { SportMarket, TicketMarket } from "~/utils/overtime/types/markets";
+import { MarketTypeEnum } from "@/utils/overtime/enums/marketTypes";
+import { SportMarket, TicketMarket } from "@/utils/overtime/types/markets";
 import { negativePlusHelper } from "./helpers";
-import { MarketTypeMap } from "~/app/constants/marketTypes";
+import { MarketTypeMap } from "@/app/constants/marketTypes";
 
 export const getMarketTypeName = (marketType: MarketTypeEnum) => {
   const marketTypeInfo = MarketTypeMap[marketType];

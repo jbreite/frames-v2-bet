@@ -4,7 +4,7 @@ import {
   SportEnum,
   MatchResolveTypeEnum,
   LeagueEnum,
-} from "~/utils/overtime/enums/sport";
+} from "@/utils/overtime/enums/sport";
 
 export interface LeagueInfo {
   sport: SportEnum;

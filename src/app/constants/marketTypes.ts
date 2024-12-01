@@ -1,5 +1,5 @@
-import { MarketTypeEnum } from "~/utils/overtime/enums/marketTypes";
-import { MarketTypeInfo } from "~/utils/overtime/types/marketTypes";
+import { MarketTypeEnum } from "@/utils/overtime/enums/marketTypes";
+import { MarketTypeInfo } from "@/utils/overtime/types/marketTypes";
 
 export const MarketTypeMap: Record<MarketTypeEnum, MarketTypeInfo> = {
   // Winner
