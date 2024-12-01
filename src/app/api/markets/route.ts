@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  CB_BET_SUPPORTED_NETWORK_IDS,
-  OVERTIME_API_BASE_URL,
-} from "@/app/constants/Constants";
+import { CB_BET_SUPPORTED_NETWORK_IDS } from "@/app/constants/Constants";
 import {
   SportMarket,
   SportMarketStatusEnum,
