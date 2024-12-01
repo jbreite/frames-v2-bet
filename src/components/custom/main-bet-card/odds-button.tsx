@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+
 interface OddsButtonProps {
   line: string;
   onPress: () => void;
@@ -22,23 +24,19 @@ export default function OddsButton({
     <button
       onClick={handlePress}
       disabled={zeroLine}
-      className={`
-        py-2 px-4
-        flex items-center justify-center
-        w-full
-        rounded-xl border-2 border-gray-200
-        // min-h-[54px]
-        ${selected ? "bg-gray-200" : "bg-transparent"}
-      `}
+      className={cn(
+        "py-2 px-4 flex items-center justify-center w-full rounded-xl border-2 border-gray-200 min-h-[54px]",
+        selected ? "bg-gray-200" : "bg-transparent"
+      )}
     >
       {zeroLine ? (
         <LockIcon className="h-[18px] w-[18px]" />
       ) : (
         <div className="flex flex-col  items-center justify-center">
           {label && (
-            <span className="font-semibold text-black w-full">{label}</span>
+            <span className="font-semibold text-black text-sm w-full">{label}</span>
           )}
-          <span className="font-semibold text-black w-full">{line}</span>
+          <span className="font-semibold text-black text-sm w-full">{line}</span>
         </div>
       )}
     </button>

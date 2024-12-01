@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import sdk, { type FrameContext } from "@farcaster/frame-sdk";
-
 import { useQuery } from "@tanstack/react-query";
 import { getMarkets } from "@/app/api/markets/route";
 import {
@@ -16,13 +15,19 @@ import { LeagueMap } from "@/app/constants/sports";
 import MainBetCard from "./custom/main-bet-card";
 import { getTradeDataFromSportMarket } from "@/utils/overtime/ui/helpers";
 import StickyHeaderMainBetCard from "./custom/home-sticky-header";
+import BetTab from "./custom/bet-tab";
+import { useAccount, useDisconnect } from "wagmi";
+import { useConnect } from "wagmi";
+import { Button } from "./ui/Button";
+import { config } from "./providers/WagmiProvider";
 
 const REFETCH_INTERVAL = 60000 * 3;
 type BetListItem = LeagueEnum | SportMarket;
 
 export default function Home() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
-  const [, setContext] = useState<FrameContext>();
+  const [context, setContext] = useState<FrameContext>();
+  const { address, isConnected } = useAccount();
 
   const {
     data: marketsData,
@@ -33,6 +38,9 @@ export default function Home() {
     queryFn: () => getMarkets(CB_BET_SUPPORTED_NETWORK_IDS.OPTIMISM, {}),
     refetchInterval: REFETCH_INTERVAL,
   });
+
+  const { disconnect } = useDisconnect();
+  const { connect } = useConnect();
 
   useEffect(() => {
     const load = async () => {
@@ -51,6 +59,7 @@ export default function Home() {
   };
 
   const [userBets, setUserBets] = useAtom(userBetsAtom);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   function handleMarketPress(market: SportMarket, tradeData: TradeData) {
     setUserBets((prevBets) => {
@@ -71,11 +80,17 @@ export default function Home() {
         // If the new bet is already selected, just return the filtered bets (removing it)
         return filteredBets;
       } else {
-        // If the new bet is not selected, add it to the filtered bets
+        setIsDrawerOpen(true);
         return [...filteredBets, { tradeData, sportMarket: market }];
       }
     });
   }
+
+  useEffect(() => {
+    if (userBets.length === 0) {
+      setIsDrawerOpen(false);
+    }
+  }, [userBets.length]);
 
   if (!isSDKLoaded) {
     return <div>Loading...</div>;
@@ -113,7 +128,7 @@ export default function Home() {
           if (typeof item === "number") {
             // League header
             return (
-              <div key={index} className="sticky top-0 z-10">
+              <div key={index} className="sticky top-0 z-1">
                 <StickyHeaderMainBetCard leagueId={item as LeagueEnum} />
               </div>
             );
@@ -144,9 +159,32 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col w-full px-4">
-      <h1>bets</h1>
-      {SportView}
+    <div className="flex flex-col w-full px-4 pt-4 gap-4">
+      <div className="sticky top-0 z-1">
+        <div className="flex items-center gap-2 justify-between">
+          <div className="flex items-center gap-2">
+            <img
+              src={context?.user?.pfpUrl}
+              className="w-10 h-10 rounded-full"
+            />
+            <p className=" font-semibold">{context?.user?.username}</p>
+          </div>
+          <Button
+            onClick={() =>
+              isConnected
+                ? disconnect()
+                : connect({ connector: config.connectors[0] })
+            }
+            className="w-fit justify-end self-end"
+          >
+            {isConnected ? "Disconnect" : "Connect"}
+          </Button>
+        </div>
+      </div>
+      <div className="flex flex-col w-full ">
+        {SportView}
+        <BetTab isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
+      </div>
     </div>
   );
 }
