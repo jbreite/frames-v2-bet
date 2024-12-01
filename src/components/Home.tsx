@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import sdk, { type FrameContext } from "@farcaster/frame-sdk";
 import { useQuery } from "@tanstack/react-query";
-import { getMarkets } from "@/app/api/markets/route";
 import {
   CB_BET_SUPPORTED_NETWORK_IDS,
   SUPPORTED_LEAGUES,
@@ -19,6 +18,7 @@ import BetTab from "./custom/bet-tab";
 import { useAccount, useDisconnect } from "wagmi";
 import { useConnect } from "wagmi";
 import { config } from "./providers/WagmiProvider";
+import { getMarkets } from "@/utils/overtime/queries/get-markets";
 
 const REFETCH_INTERVAL = 60000 * 3;
 type BetListItem = LeagueEnum | SportMarket;

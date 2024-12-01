@@ -13,7 +13,7 @@
 
 // export const usePlaceBet = (onSuccess?: () => void) => {
 //   const {
-//     writeContracts,
+//     writeContract,
 //     data: writeContractsData,
 //     isPending: writeContractsIsPending,
 //     isError: writeContractsIsError,
@@ -71,16 +71,8 @@
 //     const betCalldata = encodeFunctionData(betContractInput);
 //     console.log("Bet call Data", betCalldata);
 
-//     let contracts = [];
-//     if (buyInAmount > allowance) {
-//       console.log("hello");
-//       contracts = [approvalContractInput, betContractInput];
-//     } else {
-//       contracts = [betContractInput];
-//     }
-
 //     writeContract({
-//       contracts: contracts,
+//       ...betContractInput,
 //     });
 //   };
 
