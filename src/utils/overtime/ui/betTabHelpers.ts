@@ -1,3 +1,4 @@
+import { ErrorQuoteData, SuccessfulQuoteData } from "@/app/api/quote/route";
 import { UserBet } from "@/lib/atom/atoms";
 // import { SuccessfulQuoteData, ErrorQuoteData } from "@/utils/overtime/types/quotes";
 export function convertNormalizedImpliedToAmerican(
@@ -111,8 +112,8 @@ export function formatCurrency({
 //   return logText.slice(reasonStartIndex, endIndex).trim();
 // }
 
-// export const isSuccessfulQuoteObject = (
-//   quoteData: SuccessfulQuoteData | ErrorQuoteData
-// ): quoteData is SuccessfulQuoteData => {
-//   return "totalQuote" in quoteData;
-// };
+export const isSuccessfulQuoteObject = (
+  quoteData: SuccessfulQuoteData | ErrorQuoteData
+): quoteData is SuccessfulQuoteData => {
+  return "totalQuote" in quoteData;
+};
