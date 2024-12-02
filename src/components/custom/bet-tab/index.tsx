@@ -17,6 +17,9 @@ import { useState } from "react";
 import { INITIAL_BET_AMOUNT } from "@/app/constants/Constants";
 import BetHeader from "./bet-header";
 import { useAccount, useBalance } from "wagmi";
+import { usePlaceBet } from "@/lib/hooks/usePlaceBet";
+import { queryClient } from "@/components/providers/WagmiProvider";
+import { parseEther } from "viem";
 
 interface BetTabProps {
   isOpen: boolean;
@@ -82,8 +85,11 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
   //     router.push("/bets");
   //   };
 
-  //   const { placeBet, writeContractsIsPending, writeContractsIsError } =
-  //   usePlaceBet(onBetSuccess);
+  const { placeBet, writeContractsIsError } = usePlaceBet();
+
+  if (writeContractsIsError) {
+    console.log("writeContractsIsError", writeContractsIsError);
+  }
 
   const firstBet = userBetsAtomData[0];
   const isParlay = numberBets > 1;
@@ -116,14 +122,14 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
           )
       : "";
 
-  //   const handlePlaceBet = () => {
-  //     if (!quoteObject || isQuoteError) {
-  //       Alert.alert("Error", "Quote data is not available");
-  //       return;
-  //     }
+  const handlePlaceBet = () => {
+    if (!quoteObject || isQuoteError) {
+      alert("Quote data is not available");
+      return;
+    }
 
-  //     placeBet(quoteObject, tradeData);
-  //   };
+    placeBet(quoteObject, tradeData, numberBetAmount);
+  };
 
   const americanOdds =
     quoteObject && isSuccessfulQuoteObject(quoteObject.quoteData)
@@ -143,7 +149,26 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
     return "To Win";
   };
 
+  const enoughETH =
+    (ethBalance && numberBetAmount > parseEther(ethBalance.value.toString())) ||
+    (ethBalance === null && numberBetAmount !== 0);
+
+  const buttonText = enoughETH ? "Not enough Funds" : getWinText(quoteObject);
+
   const buttonLoadingText = getWinText(quoteObject);
+
+  let quoteText = "";
+  if (quoteObject && !isSuccessfulQuoteObject(quoteObject.quoteData)) {
+    if (quoteObject.quoteData.error.includes("Proof is not valid")) {
+      console.log("Received 'Proof is not valid' error. Refetching...");
+      console.log("invalidating..");
+      quoteText =
+        "Markets are old and are refreshing. If it doesn't work, then reset manually.";
+      queryClient.invalidateQueries({ queryKey: ["markets"] });
+    } else {
+      quoteText = quoteObject.quoteData.error;
+    }
+  }
 
   return (
     <Drawer.Root
@@ -182,13 +207,19 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
               <BetInput
                 betAmount={betAmount}
                 setBetAmount={setBetAmount}
-                onInputPress={() => {}}
-                onButtonPress={() => {}}
+                onButtonPress={() => {
+                  console.log("Placing bet");
+                  handlePlaceBet();
+                }}
                 isLoading={quoteLoading}
                 isDisabled={!quoteObject || isQuoteError}
-                buttonLabel="Place Bet"
+                buttonLabel={buttonText}
                 isLoadingText={buttonLoadingText}
               />
+              {quoteObject &&
+                !isSuccessfulQuoteObject(quoteObject.quoteData) && (
+                  <p className="text-red-500">{quoteText}</p>
+                )}
             </div>
           </div>
         </Drawer.Content>

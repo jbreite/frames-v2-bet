@@ -9,13 +9,17 @@ export interface SuccessfulQuoteData {
   totalQuote: {
     normalizedImplied: number;
     american: number;
+    decimal: number;
   };
   buyInAmountInUsd: number;
   payout: {
     usd: number;
+    ETH?: number; // Added optional ETH amount
+    payoutCollateral?: string; // Added optional collateral type
   };
   potentialProfit: {
     usd: number;
+    ETH?: number; // Added optional ETH amount
     percentage: number;
   };
 }

@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils";
 interface BetInputProps {
   betAmount: string;
   setBetAmount: (betAmount: string) => void;
-  onInputPress: () => void;
   onButtonPress: () => void;
   isLoading: boolean;
   isDisabled: boolean;

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import sdk, { type FrameContext } from "@farcaster/frame-sdk";
 import { useQuery } from "@tanstack/react-query";
@@ -26,7 +27,7 @@ type BetListItem = LeagueEnum | SportMarket;
 export default function Home() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
   const [context, setContext] = useState<FrameContext>();
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
 
   const {
     data: marketsData,
@@ -175,7 +176,7 @@ export default function Home() {
                 : connect({ connector: config.connectors[0] })
             }
           >
-            {isConnected ? "Disconnect" : "Connect"}
+            {isConnected ? `Disconnect ${address}` : "Connect"}
           </button>
         </div>
         <div className="flex flex-col w-full ">{SportView}</div>
