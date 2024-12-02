@@ -24,9 +24,14 @@ import { parseEther } from "viem";
 interface BetTabProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  setActiveTab: (tab: "bets" | "history") => void;
 }
 
-export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
+export default function BetTab({
+  isOpen,
+  setIsOpen,
+  setActiveTab,
+}: BetTabProps) {
   const { address } = useAccount();
   const [userBetsAtomData, setUserBetsAtom] = useAtom(userBetsAtom);
   const [betAmount, setBetAmount] = useState(INITIAL_BET_AMOUNT);
@@ -74,18 +79,17 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
     console.log("quoteObject", quoteObject);
   }
 
-  // const onBetSuccess = () => {
-  //     console.log("Bet placed successfully!");
-  //     setUserBetsAtom([]);
-  //     isKeyboardVisible.value = false;
-  //     setIsKeyboardVisible(false);
-  //     setBetAmount(INITIAL_BET_AMOUNT);
-  //     queryClient.invalidateQueries({ queryKey: ["userHistory"] });
-  //     queryClient.invalidateQueries({ queryKey: ["fungibles"] });
-  //     router.push("/bets");
-  //   };
+  const onBetSuccess = () => {
+    console.log("Bet placed successfully!");
+    setUserBetsAtom([]);
+    setIsOpen(false);
+    setBetAmount(INITIAL_BET_AMOUNT);
+    setActiveTab("history");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    queryClient.invalidateQueries({ queryKey: ["history"] });
+  };
 
-  const { placeBet, writeContractsIsError } = usePlaceBet();
+  const { placeBet, writeContractsIsError } = usePlaceBet(onBetSuccess);
 
   if (writeContractsIsError) {
     console.log("writeContractsIsError", writeContractsIsError);

@@ -1,13 +1,9 @@
-import { useCallback, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useAccount, useWriteContract } from "wagmi";
-import { useAtom } from "jotai";
-import { userBetsAtom } from "@/lib/atom/atoms";
+import { useWriteContract } from "wagmi";
 import { getHistory } from "@/utils/overtime/queries/get-history";
 import { CB_BET_SUPPORTED_NETWORK_IDS } from "@/app/constants/Constants";
 import TicketView from "./ticket";
 import sportsAMMV2Contract from "@/app/constants/overtimeContracts";
-// import sportsAMMV2Contract from "@/constants/overtimeContracts";
 
 export default function History({
   address,
@@ -85,7 +81,7 @@ export default function History({
     );
   }
 
-  console.log(userHistoryData)
+  console.log(userHistoryData);
 
   return (
     <div className="flex flex-col gap-8 ">

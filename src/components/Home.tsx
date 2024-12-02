@@ -200,7 +200,11 @@ export default function Home() {
           <History address={address} />
         )}
       </div>
-      <BetTab isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
+      <BetTab
+        isOpen={isDrawerOpen}
+        setIsOpen={setIsDrawerOpen}
+        setActiveTab={setActiveTab}
+      />
       <WalletControls
         isOpen={isWalletOpen}
         setIsOpen={setIsWalletOpen}
