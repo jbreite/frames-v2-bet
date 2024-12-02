@@ -15,13 +15,13 @@ export default function StickyHeaderMainBetCard({
 
   return (
     <div className="flex flex-row w-full justify-between items-center py-2 bg-white">
-      <div className="flex w-2/3 bg-white">
+      <div className="flex w-1/2 bg-white">
         <span className="text-xl font-semibold">{leagueLabel}</span>
       </div>
       <div className="w-full flex flex-row justify-between">
-        <span className="w-full text-center font-semibold">Winner</span>
-        <span className="w-full text-center font-semibold">Spread</span>
-        <span className="w-full text-center font-semibold">Total</span>
+        <span className="w-1/2 text-center font-semibold">Winner</span>
+        <span className="w-1/2 text-center font-semibold">Spread</span>
+        <span className="w-1/2 text-center font-semibold">Total</span>
       </div>
     </div>
   );
