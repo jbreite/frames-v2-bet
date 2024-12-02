@@ -104,7 +104,7 @@ export default function Home() {
         );
       });
     }
-  }, [marketsData, setUserBets]);
+  }, [marketsData, setUserBets, userBets.length]);
 
   if (!isSDKLoaded) {
     return <div>Loading...</div>;
