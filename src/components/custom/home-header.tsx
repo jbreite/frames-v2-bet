@@ -61,8 +61,8 @@ export function WalletControls({
   return (
     <Drawer.Root open={isOpen} onOpenChange={setIsOpen}>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-        <Drawer.Content className="bg-gray-100 flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 left-0 right-0 outline-none border-t border-gray-200">
+        <Drawer.Overlay className="fixed inset-0 bg-black/40 z-10" />
+        <Drawer.Content className="bg-gray-100 flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 left-0 right-0 outline-none border-t border-gray-200 z-20">
           <div className="p-4 bg-white rounded-t-[10px] flex flex-col gap-4 items-center justify-between">
             <button onClick={() => setIsOpen(false)}>
               <CircleXIcon className="w-6 h-6 absolute right-4 top-4" />

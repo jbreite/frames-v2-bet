@@ -6,9 +6,9 @@ interface TeamInfoProps {
 
 export default function TeamInfo({ teamImage, teamName }: TeamInfoProps) {
   return (
-    <div className="flex flex-row items-center gap-1 w-40">
+    <div className="flex flex-row items-center gap-2 w-1/2">
       <img src={teamImage} alt={teamName} className="w-8 h-8 object-contain" />
-      <span className="font-medium text-sm line-clamp-2">{teamName}</span>
+      <p className="font-medium text-sm line-clamp-2">{teamName}</p>
     </div>
   );
 }
