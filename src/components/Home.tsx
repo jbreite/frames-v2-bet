@@ -21,6 +21,7 @@ import BetTab from "./custom/bet-tab";
 import { useAccount } from "wagmi";
 import { getMarkets } from "@/utils/overtime/queries/get-markets";
 import HomeHeader, { WalletControls } from "./custom/home-header";
+import { usePostHog } from "posthog-js/react";
 
 const REFETCH_INTERVAL = 60000 * 3;
 type BetListItem = LeagueEnum | SportMarket;
@@ -29,6 +30,7 @@ export default function Home() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
   const [context, setContext] = useState<FrameContext>();
   const { isConnected, address } = useAccount();
+  const posthog = usePostHog();
 
   const {
     data: marketsData,
@@ -48,6 +50,10 @@ export default function Home() {
     if (sdk && !isSDKLoaded) {
       setIsSDKLoaded(true);
       load();
+      // Identify the user with their username if it exists
+      if (context?.user?.username) {
+        posthog.identify(context?.user?.username);
+      }
     }
   }, [isSDKLoaded]);
 

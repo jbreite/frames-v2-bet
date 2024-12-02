@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import AtomProvider from "@/components/providers/AtomProvider";
+import { CSPostHogProvider } from "@/components/providers/PosthogProvider";
 
 const WagmiProvider = dynamic(
   () => import("@/components/providers/WagmiProvider"),
@@ -12,8 +13,10 @@ const WagmiProvider = dynamic(
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <WagmiProvider>
-      <AtomProvider>{children}</AtomProvider>
-    </WagmiProvider>
+    <CSPostHogProvider>
+      <WagmiProvider>
+        <AtomProvider>{children}</AtomProvider>
+      </WagmiProvider>
+    </CSPostHogProvider>
   );
 }
