@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { truncateAddress } from "@/lib/truncateAddress";
 import { CircleXIcon } from "lucide-react";
 import { Drawer } from "vaul";
@@ -13,7 +14,7 @@ export default function HomeHeader({
   setIsWalletOpen,
 }: {
   isConnected: boolean;
-  pfpUrl: string | null;
+  pfpUrl: string | undefined;
   username: string;
   address: `0x${string}`;
   setIsWalletOpen: (open: boolean) => void;
@@ -24,7 +25,9 @@ export default function HomeHeader({
   return (
     <div className="flex justify-between items-center w-full">
       <div className="flex items-center gap-2">
-        <img src={pfpUrl || ""} className="w-10 h-10 rounded-full" />
+        {pfpUrl && (
+          <img src={pfpUrl} alt="Profile" className="w-10 h-10 rounded-full" />
+        )}
         <p className=" font-semibold">{username}</p>
       </div>
 
@@ -50,7 +53,7 @@ export function WalletControls({
 }: {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  pfpUrl: string | null;
+  pfpUrl: string | undefined;
   address: `0x${string}`;
 }) {
   const { disconnect } = useDisconnect();
@@ -64,10 +67,14 @@ export function WalletControls({
             <button onClick={() => setIsOpen(false)}>
               <CircleXIcon className="w-6 h-6 absolute right-4 top-4" />
             </button>
-
-            <img src={pfpUrl || ""} className="w-24 h-24 rounded-full" />
+            {pfpUrl && (
+              <img
+                src={pfpUrl}
+                alt="Profile"
+                className="w-24 h-24 rounded-full"
+              />
+            )}
             <p className="font-semibold text-lg">{truncateAddress(address)}</p>
-
             <div className="flex items-center gap-2">
               <WalletButton
                 onClick={() => {

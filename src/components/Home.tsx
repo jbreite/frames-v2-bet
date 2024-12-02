@@ -12,7 +12,10 @@ import { useAtom } from "jotai";
 import { LeagueEnum } from "@/utils/overtime/enums/sport";
 import { LeagueMap } from "@/app/constants/sports";
 import MainBetCard from "./custom/main-bet-card";
-import { getTradeDataFromSportMarket } from "@/utils/overtime/ui/helpers";
+import {
+  getTradeDataFromSportMarket,
+  updateBetWithNewMarketData,
+} from "@/utils/overtime/ui/helpers";
 import StickyHeaderMainBetCard from "./custom/home-sticky-header";
 import BetTab from "./custom/bet-tab";
 import { useAccount } from "wagmi";
@@ -88,6 +91,21 @@ export default function Home() {
     }
   }, [userBets.length]);
 
+  //Not sure there is a better way to do this, but somwething for now
+  useEffect(() => {
+    if (marketsData && userBets.length !== 0) {
+      console.log("Refreshing userBets Atom Data");
+      setUserBets((prevBets) => {
+        const allNewMarkets = Object.values(marketsData).flatMap(
+          (sportMarkets) => Object.values(sportMarkets).flat()
+        );
+        return prevBets.map((bet) =>
+          updateBetWithNewMarketData(bet, allNewMarkets)
+        );
+      });
+    }
+  }, [marketsData, setUserBets]);
+
   if (!isSDKLoaded) {
     return <div>Loading...</div>;
   }
@@ -160,7 +178,7 @@ export default function Home() {
         <div className="flex items-center gap-2 justify-between">
           <HomeHeader
             isConnected={isConnected}
-            pfpUrl={context?.user?.pfpUrl || null}
+            pfpUrl={context?.user?.pfpUrl}
             username={context?.user?.username || ""}
             address={address as `0x${string}`}
             setIsWalletOpen={setIsWalletOpen}
@@ -172,7 +190,7 @@ export default function Home() {
       <WalletControls
         isOpen={isWalletOpen}
         setIsOpen={setIsWalletOpen}
-        pfpUrl={context?.user?.pfpUrl || null}
+        pfpUrl={context?.user?.pfpUrl}
         address={address as `0x${string}`}
       />
     </>
