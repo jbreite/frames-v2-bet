@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 
 import "@/app/globals.css";
 import { Providers } from "@/app/providers";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Farcaster Frames v2 Demo",
@@ -43,7 +44,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={openRunde.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );

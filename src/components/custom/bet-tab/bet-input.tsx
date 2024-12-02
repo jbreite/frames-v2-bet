@@ -35,14 +35,14 @@ export default function BetInput({
         onClick={onButtonPress}
         disabled={isDisabled}
         className={cn(
-          "flex w-full p-4 rounded-full justify-center font-semibold",
+          "flex w-full p-3 rounded-full justify-center font-semibold",
           isDisabled
             ? "bg-gray-200 text-gray-400"
             : "bg-blue-500 text-white hover:bg-blue-600"
         )}
       >
         {isLoading ? (
-          <div className="flex items-center gap-2">
+          <div className="flex flex-row items-center gap-2">
             <LoadingSpinner />
             {isLoadingText}
           </div>

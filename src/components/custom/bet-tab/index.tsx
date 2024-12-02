@@ -13,18 +13,21 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { Drawer } from "vaul";
 import BetInput from "./bet-input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { INITIAL_BET_AMOUNT } from "@/app/constants/Constants";
 import BetHeader from "./bet-header";
 import { useAccount, useBalance } from "wagmi";
 import { usePlaceBet } from "@/lib/hooks/usePlaceBet";
 import { queryClient } from "@/components/providers/WagmiProvider";
-import { parseEther } from "viem";
+import { parseEther, parseUnits } from "viem";
+import { toast } from "sonner";
 
 interface BetTabProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
+
+const OPTIMISM_EXPLORER_URL = "https://optimistic.etherscan.io/tx/";
 
 export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
   const { address } = useAccount();
@@ -32,6 +35,8 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
   const [betAmount, setBetAmount] = useState(INITIAL_BET_AMOUNT);
   const numberBets = userBetsAtomData.length;
   const tradeData = userBetsAtomData?.map((bet) => bet?.tradeData) || [];
+  const [hasHandledConfirmation, setHasHandledConfirmation] = useState(false);
+
   console.log(tradeData);
 
   const { data: ethBalance } = useBalance({
@@ -70,10 +75,6 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
     enabled: numberBetAmount > 0 && tradeData.length > 0,
   });
 
-  if (quoteObject) {
-    console.log("quoteObject", quoteObject);
-  }
-
   // const onBetSuccess = () => {
   //     console.log("Bet placed successfully!");
   //     setUserBetsAtom([]);
@@ -85,12 +86,52 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
   //     router.push("/bets");
   //   };
 
-  const { placeBet, writeContractsIsError } = usePlaceBet();
+  const {
+    placeBet,
+    writeContractsIsError,
+    isConfirmingTransaction,
+    isConfirmedTransaction,
+    hash,
+  } = usePlaceBet();
 
   if (writeContractsIsError) {
     console.log("writeContractsIsError", writeContractsIsError);
   }
 
+  if (isConfirmedTransaction) {
+    console.log("isConfirmedTransaction", isConfirmedTransaction);
+    console.log("hash", hash);
+  }
+
+  // Reset confirmation state when transaction state changes
+  useEffect(() => {
+    if (!isConfirmedTransaction) {
+      setHasHandledConfirmation(false);
+    }
+  }, [isConfirmedTransaction]);
+
+  useEffect(() => {
+    if (isConfirmedTransaction && hash && !hasHandledConfirmation) {
+      setHasHandledConfirmation(true);
+
+      // Clear bet slip
+      setUserBetsAtom([]);
+      setBetAmount(INITIAL_BET_AMOUNT);
+      setIsOpen(false);
+
+      // Show success toast
+      toast.success("Bet placed successfully!", {
+        description: `Transaction hash: ${hash.slice(0, 6)}...${hash.slice(
+          -4
+        )}`,
+        action: {
+          label: "View Transaction",
+          onClick: () =>
+            window.open(`${OPTIMISM_EXPLORER_URL}${hash}`, "_blank"),
+        },
+      });
+    }
+  }, [isConfirmedTransaction, hash, hasHandledConfirmation]);
   const firstBet = userBetsAtomData[0];
   const isParlay = numberBets > 1;
 
@@ -150,12 +191,14 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
   };
 
   const enoughETH =
-    (ethBalance && numberBetAmount > parseEther(ethBalance.value.toString())) ||
+    (ethBalance && numberBetAmount > Number(ethBalance.decimals)) ||
     (ethBalance === null && numberBetAmount !== 0);
 
   const buttonText = enoughETH ? "Not enough Funds" : getWinText(quoteObject);
 
-  const buttonLoadingText = getWinText(quoteObject);
+  const buttonLoadingText = isConfirmedTransaction
+    ? "Placing Bet..."
+    : getWinText(quoteObject);
 
   let quoteText = "";
   if (quoteObject && !isSuccessfulQuoteObject(quoteObject.quoteData)) {
@@ -210,8 +253,10 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
                   console.log("Placing bet");
                   handlePlaceBet();
                 }}
-                isLoading={quoteLoading}
-                isDisabled={!quoteObject || isQuoteError || enoughETH}
+                isLoading={quoteLoading || isConfirmingTransaction}
+                isDisabled={
+                  !quoteObject || isQuoteError || isConfirmedTransaction
+                }
                 buttonLabel={buttonText}
                 isLoadingText={buttonLoadingText}
               />

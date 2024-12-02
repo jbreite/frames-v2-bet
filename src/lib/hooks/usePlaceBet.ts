@@ -8,7 +8,7 @@ import { QuoteData } from "@/app/api/quote/route";
 import { DEFAULT_SLIPPAGE } from "@/app/constants/overtimeContracts";
 import { TradeData } from "@/utils/overtime/types/markets";
 import { parseEther } from "viem";
-import { useWriteContract } from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { CB_BET_SUPPORTED_NETWORK_IDS } from "@/app/constants/Constants";
 
 export const usePlaceBet = (onSuccess?: () => void) => {
@@ -16,6 +16,7 @@ export const usePlaceBet = (onSuccess?: () => void) => {
     writeContract,
     isPending: writeContractsIsPending,
     isError: writeContractsIsError,
+    data: hash,
   } = useWriteContract({
     mutation: {
       onSuccess: () => {
@@ -27,6 +28,13 @@ export const usePlaceBet = (onSuccess?: () => void) => {
         // ... other logic here for success or error
       },
     },
+  });
+
+  const {
+    isLoading: isConfirmingTransaction,
+    isSuccess: isConfirmedTransaction,
+  } = useWaitForTransactionReceipt({
+    hash,
   });
 
   const placeBet = async (
@@ -76,5 +84,8 @@ export const usePlaceBet = (onSuccess?: () => void) => {
     placeBet,
     writeContractsIsPending,
     writeContractsIsError,
+    hash,
+    isConfirmingTransaction,
+    isConfirmedTransaction,
   };
 };
