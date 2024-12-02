@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import sdk, { type FrameContext } from "@farcaster/frame-sdk";
 import { useQuery } from "@tanstack/react-query";
@@ -16,10 +15,9 @@ import MainBetCard from "./custom/main-bet-card";
 import { getTradeDataFromSportMarket } from "@/utils/overtime/ui/helpers";
 import StickyHeaderMainBetCard from "./custom/home-sticky-header";
 import BetTab from "./custom/bet-tab";
-import { useAccount, useDisconnect } from "wagmi";
-import { useConnect } from "wagmi";
-import { config } from "./providers/WagmiProvider";
+import { useAccount } from "wagmi";
 import { getMarkets } from "@/utils/overtime/queries/get-markets";
+import HomeHeader, { WalletControls } from "./custom/home-header";
 
 const REFETCH_INTERVAL = 60000 * 3;
 type BetListItem = LeagueEnum | SportMarket;
@@ -39,9 +37,6 @@ export default function Home() {
     refetchInterval: REFETCH_INTERVAL,
   });
 
-  const { disconnect } = useDisconnect();
-  const { connect } = useConnect();
-
   useEffect(() => {
     const load = async () => {
       setContext(await sdk.context);
@@ -60,6 +55,7 @@ export default function Home() {
 
   const [userBets, setUserBets] = useAtom(userBetsAtom);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isWalletOpen, setIsWalletOpen] = useState(false);
 
   function handleMarketPress(market: SportMarket, tradeData: TradeData) {
     setUserBets((prevBets) => {
@@ -162,26 +158,23 @@ export default function Home() {
     <>
       <div className="flex flex-col w-full px-4 pt-4 gap-4">
         <div className="flex items-center gap-2 justify-between">
-          <div className="flex items-center gap-2">
-            <img
-              src={context?.user?.pfpUrl}
-              className="w-10 h-10 rounded-full"
-            />
-            <p className=" font-semibold">{context?.user?.username}</p>
-          </div>
-          <button
-            onClick={() =>
-              isConnected
-                ? disconnect()
-                : connect({ connector: config.connectors[0] })
-            }
-          >
-            {isConnected ? `Disconnect ${address}` : "Connect"}
-          </button>
+          <HomeHeader
+            isConnected={isConnected}
+            pfpUrl={context?.user?.pfpUrl || null}
+            username={context?.user?.username || ""}
+            address={address as `0x${string}`}
+            setIsWalletOpen={setIsWalletOpen}
+          />
         </div>
         <div className="flex flex-col w-full ">{SportView}</div>
       </div>
       <BetTab isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
+      <WalletControls
+        isOpen={isWalletOpen}
+        setIsOpen={setIsWalletOpen}
+        pfpUrl={context?.user?.pfpUrl || null}
+        address={address as `0x${string}`}
+      />
     </>
   );
 }

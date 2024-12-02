@@ -181,7 +181,6 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
         <Drawer.Content className="bg-gray-100 flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 left-0 right-0 outline-none border-t border-gray-200">
           <div className="p-4 bg-white rounded-t-[10px] flex-1">
-            {/* <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-red-300 mb-8" /> */}
             <div className="flex flex-col max-w-md mx-auto gap-4">
               {/* Header */}
               <BetHeader
