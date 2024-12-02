@@ -211,7 +211,7 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
                   handlePlaceBet();
                 }}
                 isLoading={quoteLoading}
-                isDisabled={!quoteObject || isQuoteError}
+                isDisabled={!quoteObject || isQuoteError || enoughETH}
                 buttonLabel={buttonText}
                 isLoadingText={buttonLoadingText}
               />

@@ -13,7 +13,7 @@ export default function BetHeader({
   return (
     <div className="flex justify-between">
       <div className="flex items-center gap-2">
-        <p className="font-semibold h-6 text-center aspect-square rounded-full bg-slate-400">
+        <p className="font-semibold h-6 text-center aspect-square rounded-full bg-blue-500 text-white">
           {numberBets}
         </p>
         <p>Bet Slip</p>
