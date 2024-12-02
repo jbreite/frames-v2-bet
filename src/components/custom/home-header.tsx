@@ -37,7 +37,7 @@ export default function HomeHeader({
             ? setIsWalletOpen(true)
             : connect({ connector: config.connectors[0] })
         }
-        className="font-semibold bg-gray-200 px-4 py-2 rounded-md "
+        className="font-semibold bg-gray-100 px-4 py-2 rounded-md "
       >
         {isConnected ? `${truncatedAddress}` : "Connect"}
       </button>

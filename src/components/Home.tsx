@@ -22,6 +22,8 @@ import { useAccount } from "wagmi";
 import { getMarkets } from "@/utils/overtime/queries/get-markets";
 import HomeHeader, { WalletControls } from "./custom/home-header";
 import { usePostHog } from "posthog-js/react";
+import ToggleBar from "./custom/tabs";
+import History from "@/components/custom/history";
 
 const REFETCH_INTERVAL = 60000 * 3;
 type BetListItem = LeagueEnum | SportMarket;
@@ -65,6 +67,7 @@ export default function Home() {
   const [userBets, setUserBets] = useAtom(userBetsAtom);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isWalletOpen, setIsWalletOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"bets" | "history">("bets");
 
   function handleMarketPress(market: SportMarket, tradeData: TradeData) {
     setUserBets((prevBets) => {
@@ -190,7 +193,12 @@ export default function Home() {
             setIsWalletOpen={setIsWalletOpen}
           />
         </div>
-        <div className="flex flex-col w-full ">{SportView}</div>
+        <ToggleBar activeTab={activeTab} setActiveTab={setActiveTab} />
+        {activeTab === "bets" ? (
+          <div className="flex flex-col w-full ">{SportView}</div>
+        ) : (
+          <History address={address} />
+        )}
       </div>
       <BetTab isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
       <WalletControls
