@@ -6,6 +6,7 @@ import { userBetsAtom } from "@/lib/atom/atoms";
 import { getHistory } from "@/utils/overtime/queries/get-history";
 import { CB_BET_SUPPORTED_NETWORK_IDS } from "@/app/constants/Constants";
 import TicketView from "./ticket";
+import sportsAMMV2Contract from "@/app/constants/overtimeContracts";
 // import sportsAMMV2Contract from "@/constants/overtimeContracts";
 
 export default function History({
@@ -24,13 +25,31 @@ export default function History({
     enabled: !!address,
   });
 
+  const { writeContract } = useWriteContract({
+    mutation: {
+      onSuccess: (data) => {
+        console.log("Claim successful", data);
+        refetch();
+      },
+    },
+  });
+
   const handleClaim = (ticketId: string) => {
     if (!address) {
       console.error("No wallet address found");
       return;
     }
 
-    // TODO: Implement claim functionality
+    const claimTicketInput = {
+      address: sportsAMMV2Contract.addresses[
+        CB_BET_SUPPORTED_NETWORK_IDS.OPTIMISM
+      ] as `0x${string}`,
+      abi: sportsAMMV2Contract.abi,
+      functionName: "exerciseTicket",
+      args: [ticketId],
+    };
+
+    writeContract(claimTicketInput);
   };
 
   if (userHistoryIsLoading) {
@@ -65,6 +84,8 @@ export default function History({
       </div>
     );
   }
+
+  console.log(userHistoryData)
 
   return (
     <div className="flex flex-col gap-8 ">

@@ -19,11 +19,7 @@ export default function TeamMatchup({
   return (
     <div className="flex flex-1 flex-col items-center gap-1">
       <div className="relative h-6 aspect-square">
-        <img
-          src={teamImage}
-          alt={teamName}
-          className="object-contain"
-        />
+        <img src={teamImage} alt={""} className="object-contain" />
       </div>
       <div className="flex-1 text-center font-semibold text-base">
         {teamNameString}

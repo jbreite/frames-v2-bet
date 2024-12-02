@@ -18,26 +18,23 @@ export default function TicketView({
   onPress?: (ticketId: string) => void;
 }) {
   const numberOfMarkets = ticket.numOfMarkets;
-  const formattedBuyInAmount = formatCurrency({ amount: ticket.buyInAmount });
-  const formattedPayout = formatCurrency({ amount: ticket.payout });
+  const formattedBuyInAmount =
+    ticket.collateral === "USDC"
+      ? formatCurrency({ amount: ticket.buyInAmount })
+      : `${ticket.buyInAmount.toFixed(6)}`;
+
+  const formattedPayout =
+    ticket.collateral === "USDC"
+      ? formatCurrency({ amount: ticket.payout })
+      : `${ticket.payout.toFixed(6)} WETH`;
 
   const ticketLink = `${OPTIMISTIC_ETHERERSCAN_BASE_URL}${ticket.id}`;
   const americanOdds = negativePlusHelper(
     convertNormalizedImpliedToAmerican(ticket.totalQuote)
   );
 
-  const ticketTitle =
-    numberOfMarkets > 1
-      ? `${numberOfMarkets} Parlay`
-      : getMarketOutcomeText(
-          ticket.sportMarkets[0],
-          ticket.sportMarkets[0].position,
-          ticket.sportMarkets[0].typeId,
-          ticket.sportMarkets[0].line
-        );
-
   const ticketName =
-    numberOfMarkets > 1 ? `${numberOfMarkets}-Leg Parlay` : "Single Ticket";
+    numberOfMarkets > 1 ? `${numberOfMarkets}-Leg Parlay` : "Single Bet";
 
   const ticketGameStatuses = ticket.sportMarkets.reduce(
     (acc, market) => {
@@ -85,7 +82,7 @@ export default function TicketView({
             market.typeId,
             market.line
           );
-          const marketDate = convertUnixToFormattedDate(market.maturity);
+          //   const marketDate = convertUnixToFormattedDate(market.maturity);
 
           return (
             <div key={index} className="flex flex-col gap-4">

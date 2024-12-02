@@ -1,4 +1,4 @@
-export type Coins = "USDC";
+export type Coins = "USDC" | "WETH";
 
 export type Token = {
   address: string;
