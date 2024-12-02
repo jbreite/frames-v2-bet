@@ -31,9 +31,10 @@ export default function MainBetCard({
   const formattedDate = convertUnixToFormattedDate(sportMarket.maturity);
 
   return (
-    <div onClick={onPress} className="pb-4 flex flex-col gap-2 cursor-pointer">
+    <div onClick={onPress} className="pb-4 flex flex-col gap-2 relative">
       <div className="flex flex-col w-full gap-1">
-        <div className="flex flex-row gap-1">
+        
+        <div className="flex w-full flex-row gap-1">
           <TeamInfo teamImage={awayTeamImage} teamName={sportMarket.awayTeam} />
           <OddsRow
             sportMarket={sportMarket}

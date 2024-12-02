@@ -15,7 +15,7 @@ export default function StickyHeaderMainBetCard({
 
   return (
     <div className="flex flex-row w-full justify-between items-center py-2 bg-white">
-      <div className="flex w-40">
+      <div className="flex w-2/3 bg-white">
         <span className="text-xl font-semibold">{leagueLabel}</span>
       </div>
       <div className="w-full flex flex-row justify-between">
