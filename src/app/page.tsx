@@ -10,9 +10,9 @@ const frame = {
     title: "Launch Frame",
     action: {
       type: "launch_frame",
-      name: "Farcaster Frames v2 Demo",
+      name: "Sports Betting Frame",
       url: appUrl,
-      splashImageUrl: `${appUrl}/splash.png`,
+      splashImageUrl: `${appUrl}/splashFB.png`,
       splashBackgroundColor: "#f7f7f7",
     },
   },
