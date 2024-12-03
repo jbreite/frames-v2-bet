@@ -113,7 +113,7 @@ function WalletButton({
   return (
     <button
       onClick={onClick}
-      className="w-full flex justify-center items-center bg-gray-100 px-4 py-2 rounded-md"
+      className="w-full flex justify-center items-center bg-gray-100 px-4 py-2 rounded-md font-semibold"
     >
       {children}
     </button>
