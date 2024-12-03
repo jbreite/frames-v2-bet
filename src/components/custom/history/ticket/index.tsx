@@ -5,6 +5,7 @@ import TeamMatchup from "./team-matchup";
 import { convertNormalizedImpliedToAmerican } from "@/utils/overtime/ui/betTabHelpers";
 import { formatCurrency } from "@/utils/overtime/ui/betTabHelpers";
 import { getTeamImageSource } from "@/utils/overtime/ui/images";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 // const OPTIMISTIC_ETHERERSCAN_BASE_URL =
 //   "https://optimistic.etherscan.io/address/";
@@ -121,6 +122,17 @@ export default function TicketView({
           Claim {formattedPayout}
         </button>
       )}
+    </div>
+  );
+}
+
+export function TicketLoader() {
+  return (
+    <div className="flex flex-col w-full gap-4">
+      <div className="flex flex-col gap-2">
+        <Skeleton className=" h-6 w-32" />
+        <Skeleton className="w-full min-h-40" />
+      </div>
     </div>
   );
 }

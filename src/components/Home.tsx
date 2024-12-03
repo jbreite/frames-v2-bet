@@ -12,12 +12,14 @@ import { userBetsAtom } from "@/lib/atom/atoms";
 import { useAtom } from "jotai";
 import { LeagueEnum } from "@/utils/overtime/enums/sport";
 import { LeagueMap } from "@/app/constants/sports";
-import MainBetCard from "./custom/main-bet-card";
+import MainBetCard, { MainBetCardLoader } from "./custom/main-bet-card";
 import {
   getTradeDataFromSportMarket,
   updateBetWithNewMarketData,
 } from "@/utils/overtime/ui/helpers";
-import StickyHeaderMainBetCard from "./custom/home-sticky-header";
+import StickyHeaderMainBetCard, {
+  StickyHeaderLoader,
+} from "./custom/home-sticky-header";
 import BetTab from "./custom/bet-tab";
 import { useAccount } from "wagmi";
 import { getMarkets } from "@/utils/overtime/queries/get-markets";
@@ -25,7 +27,6 @@ import HomeHeader, { WalletControls } from "./custom/home-header";
 import { usePostHog } from "posthog-js/react";
 import ToggleBar from "./custom/tabs";
 import History from "@/components/custom/history";
-import LoadingSpinner from "./custom/loading-spinner";
 import { usePlaceBet } from "@/lib/hooks/usePlaceBet";
 import { queryClient } from "./providers/WagmiProvider";
 
@@ -92,7 +93,7 @@ export default function Home() {
       onBetSuccess();
     }
   }, [isConfirmedTransaction, hash, onBetSuccess]);
-  
+
   function handleMarketPress(market: SportMarket, tradeData: TradeData) {
     setUserBets((prevBets) => {
       // Remove any existing bets for this game
@@ -151,8 +152,9 @@ export default function Home() {
 
   if (marketsIsLoading) {
     SportView = (
-      <div className="flex justify-center items-center min-h-screen">
-        <LoadingSpinner color="text-blue-500" />
+      <div className="flex flex-col gap-4 w-full">
+        <StickyHeaderLoader />
+        <MainBetCardLoader />
       </div>
     );
   } else if (marketsIsError) {

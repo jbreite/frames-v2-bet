@@ -7,6 +7,7 @@ import { PositionEnum } from "@/utils/overtime/enums/markets";
 import TeamInfo from "./team-info";
 import TeamDivider from "./team-divider";
 import { getTeamImageSource } from "@/utils/overtime/ui/images";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 interface MainBetCardProps {
   sportMarket: SportMarket;
@@ -57,6 +58,16 @@ export default function MainBetCard({
       </div>
 
       <span className="font-medium">{formattedDate}</span>
+    </div>
+  );
+}
+
+export function MainBetCardLoader() {
+  return (
+    <div className="flex flex-col w-full gap-2">
+      <Skeleton className="w-full min-h-40" />
+      <Skeleton className="w-full min-h-40" />
+      <Skeleton className="w-full min-h-40" />
     </div>
   );
 }

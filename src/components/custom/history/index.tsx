@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useWriteContract } from "wagmi";
 import { getHistory } from "@/utils/overtime/queries/get-history";
 import { CB_BET_SUPPORTED_NETWORK_IDS } from "@/app/constants/Constants";
-import TicketView from "./ticket";
+import TicketView, { TicketLoader } from "./ticket";
 import sportsAMMV2Contract from "@/app/constants/overtimeContracts";
 import LoadingSpinner from "../loading-spinner";
 import { Ticket } from "@/utils/overtime/types/markets";
@@ -52,8 +52,10 @@ export default function History({
 
   if (userHistoryIsLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <LoadingSpinner color="text-blue-500" />
+      <div className="flex flex-col w-full gap-4">
+        <TicketLoader />
+        <TicketLoader />
+        <TicketLoader />
       </div>
     );
   }
