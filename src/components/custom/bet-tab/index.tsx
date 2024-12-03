@@ -17,24 +17,33 @@ import { useState } from "react";
 import { INITIAL_BET_AMOUNT } from "@/app/constants/Constants";
 import BetHeader from "./bet-header";
 import { useAccount, useBalance } from "wagmi";
-import { usePlaceBet } from "@/lib/hooks/usePlaceBet";
 import { queryClient } from "@/components/providers/WagmiProvider";
 import { formatEther, parseEther, parseUnits } from "viem";
+import { TradeData } from "@/utils/overtime/types/markets";
 
 interface BetTabProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  setActiveTab: (tab: "bets" | "history") => void;
+  placeBet: (
+    quoteObject: QuoteData,
+    tradeData: TradeData[],
+    ethAmount: number
+  ) => void;
+  isConfirmingTransaction: boolean;
+  betAmount: string;
+  setBetAmount: (betAmount: string) => void;
 }
 
 export default function BetTab({
   isOpen,
   setIsOpen,
-  setActiveTab,
+  placeBet,
+  isConfirmingTransaction,
+  betAmount,
+  setBetAmount,
 }: BetTabProps) {
   const { address } = useAccount();
   const [userBetsAtomData, setUserBetsAtom] = useAtom(userBetsAtom);
-  const [betAmount, setBetAmount] = useState(INITIAL_BET_AMOUNT);
   const numberBets = userBetsAtomData.length;
   const tradeData = userBetsAtomData?.map((bet) => bet?.tradeData) || [];
   console.log(tradeData);
@@ -79,21 +88,22 @@ export default function BetTab({
     console.log("quoteObject", quoteObject);
   }
 
-  const onBetSuccess = () => {
-    console.log("Bet placed successfully!");
-    setUserBetsAtom([]);
-    setIsOpen(false);
-    setBetAmount(INITIAL_BET_AMOUNT);
-    setActiveTab("history");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    queryClient.invalidateQueries({ queryKey: ["history"] });
-  };
+  // const onBetSuccess = () => {
+  //   console.log("Bet placed successfully!");
+  //   setUserBetsAtom([]);
+  //   setIsOpen(false);
+  //   setBetAmount(INITIAL_BET_AMOUNT);
+  //   setActiveTab("history");
+  //   window.scrollTo({ top: 0, behavior: "smooth" });
+  //   queryClient.invalidateQueries({ queryKey: ["history"] });
+  // };
 
-  const { placeBet, writeContractsIsError } = usePlaceBet(onBetSuccess);
-
-  if (writeContractsIsError) {
-    console.log("writeContractsIsError", writeContractsIsError);
-  }
+  // const {
+  //   placeBet,
+  //   writeContractsIsError,
+  //   isConfirmingTransaction,
+  //   isConfirmedTransaction,
+  // } = usePlaceBet();
 
   const firstBet = userBetsAtomData[0];
   const isParlay = numberBets > 1;
@@ -217,8 +227,13 @@ export default function BetTab({
                   console.log("Placing bet");
                   handlePlaceBet();
                 }}
-                isLoading={quoteLoading}
-                isDisabled={!quoteObject || isQuoteError || enoughETH}
+                isLoading={quoteLoading || isConfirmingTransaction}
+                isDisabled={
+                  !quoteObject ||
+                  isQuoteError ||
+                  enoughETH ||
+                  isConfirmingTransaction
+                }
                 buttonLabel={buttonText}
                 isLoadingText={buttonLoadingText}
               />

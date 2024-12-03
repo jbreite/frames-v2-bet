@@ -3,6 +3,7 @@ import sdk, { type FrameContext } from "@farcaster/frame-sdk";
 import { useQuery } from "@tanstack/react-query";
 import {
   CB_BET_SUPPORTED_NETWORK_IDS,
+  INITIAL_BET_AMOUNT,
   SUPPORTED_LEAGUES,
 } from "@/app/constants/Constants";
 import { SportMarket } from "@/utils/overtime/types/markets";
@@ -25,6 +26,8 @@ import { usePostHog } from "posthog-js/react";
 import ToggleBar from "./custom/tabs";
 import History from "@/components/custom/history";
 import LoadingSpinner from "./custom/loading-spinner";
+import { usePlaceBet } from "@/lib/hooks/usePlaceBet";
+import { queryClient } from "./providers/WagmiProvider";
 
 const REFETCH_INTERVAL = 60000 * 3;
 type BetListItem = LeagueEnum | SportMarket;
@@ -69,6 +72,23 @@ export default function Home() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isWalletOpen, setIsWalletOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"bets" | "history">("bets");
+  const [betAmount, setBetAmount] = useState(INITIAL_BET_AMOUNT);
+
+  const { placeBet, isConfirmingTransaction, isConfirmedTransaction, hash } =
+    usePlaceBet();
+
+  useEffect(() => {
+    if (isConfirmedTransaction && hash) {
+      console.log("Bet placed successfully!");
+      setUserBets([]);
+      setBetAmount(INITIAL_BET_AMOUNT);
+      setIsDrawerOpen(false);
+
+      setActiveTab("history");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      queryClient.invalidateQueries({ queryKey: ["history"] });
+    }
+  }, [isConfirmedTransaction, hash]);
 
   function handleMarketPress(market: SportMarket, tradeData: TradeData) {
     setUserBets((prevBets) => {
@@ -208,7 +228,10 @@ export default function Home() {
       <BetTab
         isOpen={isDrawerOpen}
         setIsOpen={setIsDrawerOpen}
-        setActiveTab={setActiveTab}
+        betAmount={betAmount}
+        setBetAmount={setBetAmount}
+        placeBet={placeBet}
+        isConfirmingTransaction={isConfirmingTransaction}
       />
       <WalletControls
         isOpen={isWalletOpen}
