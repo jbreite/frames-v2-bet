@@ -4,6 +4,7 @@ import { getHistory } from "@/utils/overtime/queries/get-history";
 import { CB_BET_SUPPORTED_NETWORK_IDS } from "@/app/constants/Constants";
 import TicketView from "./ticket";
 import sportsAMMV2Contract from "@/app/constants/overtimeContracts";
+import LoadingSpinner from "../loading-spinner";
 
 export default function History({
   address,
@@ -49,7 +50,11 @@ export default function History({
   };
 
   if (userHistoryIsLoading) {
-    return <div className="flex justify-center items-center">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner color="text-blue-500" />
+      </div>
+    );
   }
 
   if (userHistoryIsError) {

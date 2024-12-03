@@ -24,6 +24,7 @@ import HomeHeader, { WalletControls } from "./custom/home-header";
 import { usePostHog } from "posthog-js/react";
 import ToggleBar from "./custom/tabs";
 import History from "@/components/custom/history";
+import LoadingSpinner from "./custom/loading-spinner";
 
 const REFETCH_INTERVAL = 60000 * 3;
 type BetListItem = LeagueEnum | SportMarket;
@@ -126,7 +127,11 @@ export default function Home() {
   let SportView;
 
   if (marketsIsLoading) {
-    SportView = <div>Loading...</div>;
+    SportView = (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner color="text-blue-500" />
+      </div>
+    );
   } else if (marketsIsError) {
     SportView = <div>No markets found</div>;
   } else if (marketsData) {
