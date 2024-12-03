@@ -19,7 +19,7 @@ import BetHeader from "./bet-header";
 import { useAccount, useBalance } from "wagmi";
 import { usePlaceBet } from "@/lib/hooks/usePlaceBet";
 import { queryClient } from "@/components/providers/WagmiProvider";
-import { parseEther } from "viem";
+import { formatEther, parseEther, parseUnits } from "viem";
 
 interface BetTabProps {
   isOpen: boolean;
@@ -153,8 +153,11 @@ export default function BetTab({
     return "To Win";
   };
 
+  const ethNumberValue =
+    (ethBalance?.value && Number(formatEther(ethBalance.value))) || 0;
+
   const enoughETH =
-    (ethBalance && numberBetAmount > parseEther(ethBalance.value.toString())) ||
+    (ethBalance && numberBetAmount > ethNumberValue) ||
     (ethBalance === null && numberBetAmount !== 0);
 
   const buttonText = enoughETH ? "Not enough Funds" : getWinText(quoteObject);

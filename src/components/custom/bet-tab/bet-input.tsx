@@ -28,8 +28,8 @@ export default function BetInput({
         pattern="[0-9]*"
         value={betAmount}
         onChange={(e) => setBetAmount(e.target.value)}
-        className="flex w-full font-bold focus:outline-none"
-        placeholder="Enter ETH amount"
+        className="flex w-3/5 font-bold focus:outline-none"
+        placeholder="ETH amount"
       />
 
       <button
