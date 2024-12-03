@@ -13,12 +13,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { Drawer } from "vaul";
 import BetInput from "./bet-input";
-import { useState } from "react";
 import { INITIAL_BET_AMOUNT } from "@/app/constants/Constants";
 import BetHeader from "./bet-header";
 import { useAccount, useBalance } from "wagmi";
 import { queryClient } from "@/components/providers/WagmiProvider";
-import { formatEther, parseEther, parseUnits } from "viem";
+import { formatEther } from "viem";
 import { TradeData } from "@/utils/overtime/types/markets";
 
 interface BetTabProps {
@@ -87,23 +86,6 @@ export default function BetTab({
   if (quoteObject) {
     console.log("quoteObject", quoteObject);
   }
-
-  // const onBetSuccess = () => {
-  //   console.log("Bet placed successfully!");
-  //   setUserBetsAtom([]);
-  //   setIsOpen(false);
-  //   setBetAmount(INITIAL_BET_AMOUNT);
-  //   setActiveTab("history");
-  //   window.scrollTo({ top: 0, behavior: "smooth" });
-  //   queryClient.invalidateQueries({ queryKey: ["history"] });
-  // };
-
-  // const {
-  //   placeBet,
-  //   writeContractsIsError,
-  //   isConfirmingTransaction,
-  //   isConfirmedTransaction,
-  // } = usePlaceBet();
 
   const firstBet = userBetsAtomData[0];
   const isParlay = numberBets > 1;

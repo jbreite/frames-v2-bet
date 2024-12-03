@@ -5,6 +5,7 @@ import { CB_BET_SUPPORTED_NETWORK_IDS } from "@/app/constants/Constants";
 import TicketView from "./ticket";
 import sportsAMMV2Contract from "@/app/constants/overtimeContracts";
 import LoadingSpinner from "../loading-spinner";
+import { Ticket } from "@/utils/overtime/types/markets";
 
 export default function History({
   address,
@@ -93,7 +94,7 @@ export default function History({
       {userHistoryData.claimable.length > 0 && (
         <div className="flex flex-col gap-2">
           <h2 className="text-2xl font-semibold">Claimable</h2>
-          {userHistoryData.claimable.map((ticket: any) => (
+          {userHistoryData.claimable.map((ticket: Ticket) => (
             <TicketView
               key={ticket.id}
               ticket={ticket}
@@ -106,7 +107,7 @@ export default function History({
       {userHistoryData.open.length > 0 && (
         <div className="flex flex-col gap-2">
           <h2 className="text-2xl font-semibold">Open</h2>
-          {userHistoryData.open.map((ticket: any) => (
+          {userHistoryData.open.map((ticket: Ticket) => (
             <TicketView key={ticket.id} ticket={ticket} />
           ))}
         </div>
@@ -115,7 +116,7 @@ export default function History({
       {userHistoryData.closed.length > 0 && (
         <div className="flex flex-col gap-2">
           <h2 className="text-2xl font-semibold">Closed</h2>
-          {userHistoryData.closed.map((ticket: any) => (
+          {userHistoryData.closed.map((ticket: Ticket) => (
             <TicketView key={ticket.id} ticket={ticket} />
           ))}
         </div>

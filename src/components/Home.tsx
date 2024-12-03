@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import sdk, { type FrameContext } from "@farcaster/frame-sdk";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -61,7 +61,7 @@ export default function Home() {
         posthog.identify(context?.user?.username);
       }
     }
-  }, [isSDKLoaded]);
+  }, [isSDKLoaded, context?.user?.username, posthog]);
 
   const renderError = (error: Error | null) => {
     if (!error) return null;
@@ -77,19 +77,22 @@ export default function Home() {
   const { placeBet, isConfirmingTransaction, isConfirmedTransaction, hash } =
     usePlaceBet();
 
+  const onBetSuccess = useCallback(() => {
+    console.log("Bet placed successfully!");
+    setUserBets([]);
+    setBetAmount(INITIAL_BET_AMOUNT);
+    setIsDrawerOpen(false);
+    setActiveTab("history");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    queryClient.invalidateQueries({ queryKey: ["history"] });
+  }, [setUserBets, setBetAmount, setIsDrawerOpen, setActiveTab]); // Empty dependency array since these functions are stable
+
   useEffect(() => {
     if (isConfirmedTransaction && hash) {
-      console.log("Bet placed successfully!");
-      setUserBets([]);
-      setBetAmount(INITIAL_BET_AMOUNT);
-      setIsDrawerOpen(false);
-
-      setActiveTab("history");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      queryClient.invalidateQueries({ queryKey: ["history"] });
+      onBetSuccess();
     }
-  }, [isConfirmedTransaction, hash]);
-
+  }, [isConfirmedTransaction, hash, onBetSuccess]);
+  
   function handleMarketPress(market: SportMarket, tradeData: TradeData) {
     setUserBets((prevBets) => {
       // Remove any existing bets for this game
