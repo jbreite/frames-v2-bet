@@ -14,7 +14,7 @@ export async function GET() {
       version: "0.0.0",
       name: "Sports Betting Frame",
       iconUrl: `${appUrl}/icon.png`,
-      splashImageUrl: `${appUrl}/splash.png`,
+      splashImageUrl: `${appUrl}/splashFB.png`,
       splashBackgroundColor: "#f7f7f7",
       homeUrl: appUrl,
     },
