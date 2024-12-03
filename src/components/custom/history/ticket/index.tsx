@@ -2,13 +2,12 @@ import { Ticket } from "@/utils/overtime/types/markets";
 import { negativePlusHelper } from "@/utils/overtime/ui/helpers";
 import { getMarketOutcomeText } from "@/utils/overtime/ui/markets";
 import TeamMatchup from "./team-matchup";
-import { convertUnixToFormattedDate } from "@/utils/overtime/ui/date";
 import { convertNormalizedImpliedToAmerican } from "@/utils/overtime/ui/betTabHelpers";
 import { formatCurrency } from "@/utils/overtime/ui/betTabHelpers";
 import { getTeamImageSource } from "@/utils/overtime/ui/images";
 
-const OPTIMISTIC_ETHERERSCAN_BASE_URL =
-  "https://optimistic.etherscan.io/address/";
+// const OPTIMISTIC_ETHERERSCAN_BASE_URL =
+//   "https://optimistic.etherscan.io/address/";
 
 export default function TicketView({
   ticket,
@@ -28,7 +27,7 @@ export default function TicketView({
       ? formatCurrency({ amount: ticket.payout })
       : `${ticket.payout.toFixed(6)} WETH`;
 
-  const ticketLink = `${OPTIMISTIC_ETHERERSCAN_BASE_URL}${ticket.id}`;
+  //   const ticketLink = `${OPTIMISTIC_ETHERERSCAN_BASE_URL}${ticket.id}`;
   const americanOdds = negativePlusHelper(
     convertNormalizedImpliedToAmerican(ticket.totalQuote)
   );
@@ -49,7 +48,7 @@ export default function TicketView({
   );
 
   const ticketStatusSummary = Object.entries(ticketGameStatuses)
-    .filter(([_, count]) => count > 0)
+    .filter(([, count]) => count > 0)
     .map(([status, count]) => `${count} ${status}`)
     .join(", ");
 
