@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import sdk, { type FrameContext } from "@farcaster/frame-sdk";
 import { useQuery } from "@tanstack/react-query";
 import {
   CB_BET_SUPPORTED_NETWORK_IDS,
+  INITIAL_BET_AMOUNT,
   SUPPORTED_LEAGUES,
 } from "@/app/constants/Constants";
 import { SportMarket } from "@/utils/overtime/types/markets";
@@ -11,17 +12,23 @@ import { userBetsAtom } from "@/lib/atom/atoms";
 import { useAtom } from "jotai";
 import { LeagueEnum } from "@/utils/overtime/enums/sport";
 import { LeagueMap } from "@/app/constants/sports";
-import MainBetCard from "./custom/main-bet-card";
+import MainBetCard, { MainBetCardLoader } from "./custom/main-bet-card";
 import {
   getTradeDataFromSportMarket,
   updateBetWithNewMarketData,
 } from "@/utils/overtime/ui/helpers";
-import StickyHeaderMainBetCard from "./custom/home-sticky-header";
+import StickyHeaderMainBetCard, {
+  StickyHeaderLoader,
+} from "./custom/home-sticky-header";
 import BetTab from "./custom/bet-tab";
 import { useAccount } from "wagmi";
 import { getMarkets } from "@/utils/overtime/queries/get-markets";
 import HomeHeader, { WalletControls } from "./custom/home-header";
 import { usePostHog } from "posthog-js/react";
+import ToggleBar from "./custom/tabs";
+import History from "@/components/custom/history";
+import { usePlaceBet } from "@/lib/hooks/usePlaceBet";
+import { queryClient } from "./providers/WagmiProvider";
 
 const REFETCH_INTERVAL = 60000 * 3;
 type BetListItem = LeagueEnum | SportMarket;
@@ -55,7 +62,7 @@ export default function Home() {
         posthog.identify(context?.user?.username);
       }
     }
-  }, [isSDKLoaded]);
+  }, [isSDKLoaded, context?.user?.username, posthog]);
 
   const renderError = (error: Error | null) => {
     if (!error) return null;
@@ -65,6 +72,27 @@ export default function Home() {
   const [userBets, setUserBets] = useAtom(userBetsAtom);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isWalletOpen, setIsWalletOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"bets" | "history">("bets");
+  const [betAmount, setBetAmount] = useState(INITIAL_BET_AMOUNT);
+
+  const { placeBet, isConfirmingTransaction, isConfirmedTransaction, hash } =
+    usePlaceBet();
+
+  const onBetSuccess = useCallback(() => {
+    console.log("Bet placed successfully!");
+    setUserBets([]);
+    setBetAmount(INITIAL_BET_AMOUNT);
+    setIsDrawerOpen(false);
+    setActiveTab("history");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    queryClient.invalidateQueries({ queryKey: ["history"] });
+  }, [setUserBets, setBetAmount, setIsDrawerOpen, setActiveTab]); // Empty dependency array since these functions are stable
+
+  useEffect(() => {
+    if (isConfirmedTransaction && hash) {
+      onBetSuccess();
+    }
+  }, [isConfirmedTransaction, hash, onBetSuccess]);
 
   function handleMarketPress(market: SportMarket, tradeData: TradeData) {
     setUserBets((prevBets) => {
@@ -123,7 +151,12 @@ export default function Home() {
   let SportView;
 
   if (marketsIsLoading) {
-    SportView = <div>Loading...</div>;
+    SportView = (
+      <div className="flex flex-col gap-4 w-full">
+        <StickyHeaderLoader />
+        <MainBetCardLoader />
+      </div>
+    );
   } else if (marketsIsError) {
     SportView = <div>No markets found</div>;
   } else if (marketsData) {
@@ -190,9 +223,21 @@ export default function Home() {
             setIsWalletOpen={setIsWalletOpen}
           />
         </div>
-        <div className="flex flex-col w-full ">{SportView}</div>
+        <ToggleBar activeTab={activeTab} setActiveTab={setActiveTab} />
+        {activeTab === "bets" ? (
+          <div className="flex flex-col w-full ">{SportView}</div>
+        ) : (
+          <History address={address} />
+        )}
       </div>
-      <BetTab isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
+      <BetTab
+        isOpen={isDrawerOpen}
+        setIsOpen={setIsDrawerOpen}
+        betAmount={betAmount}
+        setBetAmount={setBetAmount}
+        placeBet={placeBet}
+        isConfirmingTransaction={isConfirmingTransaction}
+      />
       <WalletControls
         isOpen={isWalletOpen}
         setIsOpen={setIsWalletOpen}

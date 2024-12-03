@@ -5,6 +5,7 @@ import { Drawer } from "vaul";
 import { useConnect } from "wagmi";
 import { useDisconnect } from "wagmi";
 import { config } from "@/components/providers/WagmiProvider";
+import { useState } from "react";
 
 export default function HomeHeader({
   isConnected,
@@ -37,7 +38,7 @@ export default function HomeHeader({
             ? setIsWalletOpen(true)
             : connect({ connector: config.connectors[0] })
         }
-        className="font-semibold bg-gray-200 px-4 py-2 rounded-md "
+        className="font-semibold bg-gray-100 px-4 py-2 rounded-md "
       >
         {isConnected ? `${truncatedAddress}` : "Connect"}
       </button>
@@ -57,6 +58,7 @@ export function WalletControls({
   address: `0x${string}`;
 }) {
   const { disconnect } = useDisconnect();
+  const [copied, setCopied] = useState(false);
 
   return (
     <Drawer.Root open={isOpen} onOpenChange={setIsOpen}>
@@ -75,7 +77,7 @@ export function WalletControls({
               />
             )}
             <p className="font-semibold text-lg">{truncateAddress(address)}</p>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full">
               <WalletButton
                 onClick={() => {
                   disconnect();
@@ -85,9 +87,13 @@ export function WalletControls({
                 Disconnect
               </WalletButton>
               <WalletButton
-                onClick={() => navigator.clipboard.writeText(address)}
+                onClick={() => {
+                  navigator.clipboard.writeText(address);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                }}
               >
-                Copy Address
+                {copied ? "Copied!" : "Copy Address"}
               </WalletButton>
             </div>
           </div>
@@ -104,5 +110,12 @@ function WalletButton({
   children: React.ReactNode;
   onClick: () => void;
 }) {
-  return <button onClick={onClick}>{children}</button>;
+  return (
+    <button
+      onClick={onClick}
+      className="w-full flex justify-center items-center bg-gray-100 px-4 py-2 rounded-md"
+    >
+      {children}
+    </button>
+  );
 }

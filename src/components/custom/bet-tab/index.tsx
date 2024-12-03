@@ -13,23 +13,36 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { Drawer } from "vaul";
 import BetInput from "./bet-input";
-import { useState } from "react";
 import { INITIAL_BET_AMOUNT } from "@/app/constants/Constants";
 import BetHeader from "./bet-header";
 import { useAccount, useBalance } from "wagmi";
-import { usePlaceBet } from "@/lib/hooks/usePlaceBet";
 import { queryClient } from "@/components/providers/WagmiProvider";
-import { parseEther } from "viem";
+import { formatEther } from "viem";
+import { TradeData } from "@/utils/overtime/types/markets";
 
 interface BetTabProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  placeBet: (
+    quoteObject: QuoteData,
+    tradeData: TradeData[],
+    ethAmount: number
+  ) => void;
+  isConfirmingTransaction: boolean;
+  betAmount: string;
+  setBetAmount: (betAmount: string) => void;
 }
 
-export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
+export default function BetTab({
+  isOpen,
+  setIsOpen,
+  placeBet,
+  isConfirmingTransaction,
+  betAmount,
+  setBetAmount,
+}: BetTabProps) {
   const { address } = useAccount();
   const [userBetsAtomData, setUserBetsAtom] = useAtom(userBetsAtom);
-  const [betAmount, setBetAmount] = useState(INITIAL_BET_AMOUNT);
   const numberBets = userBetsAtomData.length;
   const tradeData = userBetsAtomData?.map((bet) => bet?.tradeData) || [];
   console.log(tradeData);
@@ -72,23 +85,6 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
 
   if (quoteObject) {
     console.log("quoteObject", quoteObject);
-  }
-
-  // const onBetSuccess = () => {
-  //     console.log("Bet placed successfully!");
-  //     setUserBetsAtom([]);
-  //     isKeyboardVisible.value = false;
-  //     setIsKeyboardVisible(false);
-  //     setBetAmount(INITIAL_BET_AMOUNT);
-  //     queryClient.invalidateQueries({ queryKey: ["userHistory"] });
-  //     queryClient.invalidateQueries({ queryKey: ["fungibles"] });
-  //     router.push("/bets");
-  //   };
-
-  const { placeBet, writeContractsIsError } = usePlaceBet();
-
-  if (writeContractsIsError) {
-    console.log("writeContractsIsError", writeContractsIsError);
   }
 
   const firstBet = userBetsAtomData[0];
@@ -149,8 +145,11 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
     return "To Win";
   };
 
+  const ethNumberValue =
+    (ethBalance?.value && Number(formatEther(ethBalance.value))) || 0;
+
   const enoughETH =
-    (ethBalance && numberBetAmount > parseEther(ethBalance.value.toString())) ||
+    (ethBalance && numberBetAmount > ethNumberValue) ||
     (ethBalance === null && numberBetAmount !== 0);
 
   const buttonText = enoughETH ? "Not enough Funds" : getWinText(quoteObject);
@@ -179,7 +178,7 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
     >
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-        <Drawer.Content className="bg-gray-100 flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 left-0 right-0 outline-none border-t border-gray-200">
+        <Drawer.Content className="bg-gray-100 flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 left-0 right-0 outline-none border-t border-gray-200 z-20">
           <div className="p-4 bg-white rounded-t-[10px] flex-1">
             <div className="flex flex-col max-w-md mx-auto gap-4">
               {/* Header */}
@@ -210,8 +209,13 @@ export default function BetTab({ isOpen, setIsOpen }: BetTabProps) {
                   console.log("Placing bet");
                   handlePlaceBet();
                 }}
-                isLoading={quoteLoading}
-                isDisabled={!quoteObject || isQuoteError || enoughETH}
+                isLoading={quoteLoading || isConfirmingTransaction}
+                isDisabled={
+                  !quoteObject ||
+                  isQuoteError ||
+                  enoughETH ||
+                  isConfirmingTransaction
+                }
                 buttonLabel={buttonText}
                 isLoadingText={buttonLoadingText}
               />
