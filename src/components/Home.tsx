@@ -49,20 +49,32 @@ export default function Home() {
     refetchInterval: REFETCH_INTERVAL,
   });
 
+  // Handle SDK initialization
   useEffect(() => {
     const load = async () => {
-      setContext(await sdk.context);
+      const newContext = await sdk.context;
+      setContext(newContext);
       sdk.actions.ready();
     };
+
     if (sdk && !isSDKLoaded) {
       setIsSDKLoaded(true);
       load();
-      // Identify the user with their username if it exists
-      if (context?.user?.username) {
-        posthog.identify(context?.user?.username);
-      }
     }
-  }, [isSDKLoaded, context?.user?.username, posthog]);
+  }, [isSDKLoaded]);
+
+  const identifyUser = useCallback(
+    (username: string) => {
+      posthog.identify(username);
+    },
+    [posthog]
+  ); // posthog is now referenced in closure
+
+  useEffect(() => {
+    if (context?.user?.username) {
+      identifyUser(context.user.username);
+    }
+  }, [context?.user?.username, identifyUser]);
 
   const renderError = (error: Error | null) => {
     if (!error) return null;
