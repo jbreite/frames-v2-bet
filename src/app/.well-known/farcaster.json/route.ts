@@ -12,7 +12,7 @@ export async function GET() {
     },
     frame: {
       version: "0.0.0",
-      name: "Frames v2 Demo",
+      name: "Sports Betting Frame",
       iconUrl: `${appUrl}/icon.png`,
       splashImageUrl: `${appUrl}/splash.png`,
       splashBackgroundColor: "#f7f7f7",
