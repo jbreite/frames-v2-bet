@@ -1,5 +1,4 @@
-import Image from "next/image";
-
+/* eslint-disable @next/next/no-img-element */
 export default function TeamMatchup({
   teamName,
   teamImage,
