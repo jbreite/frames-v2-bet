@@ -5,6 +5,7 @@ import { CB_BET_SUPPORTED_NETWORK_IDS } from "@/app/constants/Constants";
 import TicketView, { TicketLoader } from "./ticket";
 import sportsAMMV2Contract from "@/app/constants/overtimeContracts";
 import { Ticket } from "@/utils/overtime/types/markets";
+import { queryClient } from "@/components/providers/WagmiProvider";
 
 export default function History({
   address,
@@ -15,7 +16,6 @@ export default function History({
     data: userHistoryData,
     isLoading: userHistoryIsLoading,
     isError: userHistoryIsError,
-    refetch,
   } = useQuery({
     queryKey: ["userHistory", address?.toString()],
     queryFn: () => getHistory(address as `0x${string}`),
@@ -26,7 +26,7 @@ export default function History({
     mutation: {
       onSuccess: (data) => {
         console.log("Claim successful", data);
-        refetch();
+        queryClient.invalidateQueries({ queryKey: ["history"] });
       },
     },
   });
