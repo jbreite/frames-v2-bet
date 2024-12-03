@@ -4,7 +4,6 @@ import { getHistory } from "@/utils/overtime/queries/get-history";
 import { CB_BET_SUPPORTED_NETWORK_IDS } from "@/app/constants/Constants";
 import TicketView, { TicketLoader } from "./ticket";
 import sportsAMMV2Contract from "@/app/constants/overtimeContracts";
-import LoadingSpinner from "../loading-spinner";
 import { Ticket } from "@/utils/overtime/types/markets";
 
 export default function History({
