@@ -57,6 +57,13 @@ export default function BetTab({
     ? parseFloat(betAmount.replace("$", ""))
     : 0;
 
+  const ethNumberValue =
+    (ethBalance?.value && Number(formatEther(ethBalance.value))) || 0;
+
+  const enoughETH =
+    (ethBalance && numberBetAmount > ethNumberValue) ||
+    (ethBalance === null && numberBetAmount !== 0);
+
   const {
     data: quoteObject,
     isLoading: quoteLoading,
@@ -145,16 +152,11 @@ export default function BetTab({
     return "To Win";
   };
 
-  const ethNumberValue =
-    (ethBalance?.value && Number(formatEther(ethBalance.value))) || 0;
-
-  const enoughETH =
-    (ethBalance && numberBetAmount > ethNumberValue) ||
-    (ethBalance === null && numberBetAmount !== 0);
-
   const buttonText = enoughETH ? "Not enough Funds" : getWinText(quoteObject);
 
-  const buttonLoadingText = getWinText(quoteObject);
+  const buttonLoadingText = isConfirmingTransaction
+    ? "Placing Bet..."
+    : getWinText(quoteObject);
 
   let quoteText = "";
   if (quoteObject && !isSuccessfulQuoteObject(quoteObject.quoteData)) {
@@ -209,11 +211,13 @@ export default function BetTab({
                   console.log("Placing bet");
                   handlePlaceBet();
                 }}
-                isLoading={quoteLoading || isConfirmingTransaction}
+                isLoading={
+                  !enoughETH && (quoteLoading || isConfirmingTransaction)
+                }
                 isDisabled={
+                  enoughETH ||
                   !quoteObject ||
                   isQuoteError ||
-                  enoughETH ||
                   isConfirmingTransaction
                 }
                 buttonLabel={buttonText}
