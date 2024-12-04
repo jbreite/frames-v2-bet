@@ -193,7 +193,7 @@ export default function Home() {
           if (typeof item === "number") {
             // League header
             return (
-              <div key={index} className="sticky top-0 bg-white z-10">
+              <div key={index} className="sticky top-0 z-10 bg-background">
                 <StickyHeaderMainBetCard leagueId={item as LeagueEnum} />
               </div>
             );

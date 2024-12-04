@@ -27,7 +27,7 @@ export default function OddsButton({
       disabled={zeroLine}
       className={cn(
         "py-2 px-4 flex items-center justify-center w-full rounded-xl border-2 border-gray-200 min-h-[54px]",
-        selected ? "bg-gray-200" : "bg-transparent"
+        selected ? "bg-gray-200 dark:text-black" : "bg-transparent"
       )}
     >
       {zeroLine ? (
@@ -35,11 +35,11 @@ export default function OddsButton({
       ) : (
         <div className="flex flex-col  items-center justify-center">
           {label && (
-            <span className="font-semibold text-black text-sm w-full leading-tight">
+            <span className="font-semibold text-sm w-full leading-tight">
               {label}
             </span>
           )}
-          <span className="font-semibold text-black text-sm w-full leading-tight">
+          <span className="font-semibold text-sm w-full leading-tight">
             {line}
           </span>
         </div>

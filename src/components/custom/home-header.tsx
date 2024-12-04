@@ -29,7 +29,7 @@ export default function HomeHeader({
         {pfpUrl && (
           <img src={pfpUrl} alt="Profile" className="w-10 h-10 rounded-full" />
         )}
-        <p className=" font-semibold">{username}</p>
+        <p className="font-semibold dark:text-white">{username}</p>
       </div>
 
       <button
@@ -38,7 +38,7 @@ export default function HomeHeader({
             ? setIsWalletOpen(true)
             : connect({ connector: config.connectors[0] })
         }
-        className="font-semibold bg-gray-100 px-4 py-2 rounded-md "
+        className="font-semibold bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-md dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
       >
         {isConnected ? `${truncatedAddress}` : "Connect"}
       </button>
@@ -64,10 +64,10 @@ export function WalletControls({
     <Drawer.Root open={isOpen} onOpenChange={setIsOpen}>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/40 z-10" />
-        <Drawer.Content className="bg-gray-100 flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 left-0 right-0 outline-none border-t border-gray-200 z-20">
-          <div className="p-4 bg-white rounded-t-[10px] flex flex-col gap-4 items-center justify-between">
+        <Drawer.Content className="bg-gray-100 dark:bg-gray-800 flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 left-0 right-0 outline-none border-t border-gray-200 dark:border-gray-700 z-20">
+          <div className="p-4 bg-background rounded-t-[10px] flex flex-col gap-4 items-center justify-between">
             <button onClick={() => setIsOpen(false)}>
-              <CircleXIcon className="w-6 h-6 absolute right-4 top-4" />
+              <CircleXIcon className="w-6 h-6 absolute right-4 top-4 dark:text-white" />
             </button>
             {pfpUrl && (
               <img
@@ -76,7 +76,9 @@ export function WalletControls({
                 className="w-24 h-24 rounded-full"
               />
             )}
-            <p className="font-semibold text-lg">{truncateAddress(address)}</p>
+            <p className="font-semibold text-lg dark:text-white">
+              {truncateAddress(address)}
+            </p>
             <div className="flex items-center gap-2 w-full">
               <WalletButton
                 onClick={() => {
@@ -113,7 +115,7 @@ function WalletButton({
   return (
     <button
       onClick={onClick}
-      className="w-full flex justify-center items-center bg-gray-100 px-4 py-2 rounded-md font-semibold"
+      className="w-full flex justify-center items-center bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-md font-semibold dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
     >
       {children}
     </button>
